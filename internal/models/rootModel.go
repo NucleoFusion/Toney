@@ -7,6 +7,7 @@ import (
 	"github.com/SourcewareLab/Toney/internal/messages"
 	filepopup "github.com/SourcewareLab/Toney/internal/models/filePopup"
 	homemodel "github.com/SourcewareLab/Toney/internal/models/homeModel"
+	"github.com/SourcewareLab/Toney/internal/models/menu"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
 	tea "github.com/charmbracelet/bubbletea"
@@ -18,6 +19,8 @@ type RootModel struct {
 	Height        int
 	Page          enums.Page
 	Home          *homemodel.HomeModel
+	Menu          *menu.Menu
+	CurrentPage   enums.Page
 	ShowPopup     bool
 	FilePopupType enums.PopupType
 	FilePopup     *filepopup.FilePopup
@@ -26,8 +29,7 @@ type RootModel struct {
 
 func NewRoot() *RootModel {
 	return &RootModel{
-		Page:      enums.Home,
-		Home:      nil,
+		Page:      enums.MenuPage,
 		ShowPopup: false,
 		isLoading: true,
 	}
@@ -76,6 +78,7 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.Home.Update(msg)
 		} else {
 			m.Home = homemodel.NewHome(msg.Width, msg.Height)
+			m.Menu = menu.NewMenu(msg.Width, msg.Height)
 		}
 
 		m.isLoading = false
@@ -88,15 +91,18 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if m.ShowPopup {
 		_, cmd = m.FilePopup.Update(msg)
 	} else {
-		_, cmd = m.Home.Update(msg)
+		switch m.CurrentPage {
+		case enums.MenuPage:
+			_, cmd = m.Menu.Update(msg)
+		case enums.HomePage:
+			_, cmd = m.Home.Update(msg)
+		}
 	}
 
 	return m, cmd
 }
 
 func (m *RootModel) View() string {
-	bg := m.Home
-
 	if m.isLoading {
 		return lipgloss.NewStyle().Render("Loading...")
 	}
@@ -105,5 +111,12 @@ func (m *RootModel) View() string {
 		return lipgloss.Place(m.Width+2, m.Height+2, lipgloss.Center, lipgloss.Center, m.FilePopup.View())
 	}
 
-	return lipgloss.NewStyle().Background(colors.ColorPalette().Base).Render(bg.View())
+	switch m.CurrentPage {
+	case enums.HomePage:
+		return lipgloss.NewStyle().Background(colors.ColorPalette().Base).Render(m.Home.View())
+	case enums.MenuPage:
+		return m.Menu.View()
+	}
+
+	return m.Menu.View()
 }

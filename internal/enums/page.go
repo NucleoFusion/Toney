@@ -3,7 +3,9 @@ package enums
 type Page int
 
 const (
-	Vault = iota
-	Editor
-	Home
+	MenuPage = iota
+	HomePage
+	Page2
+	Page3
+	Page4
 )
