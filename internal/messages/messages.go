@@ -6,6 +6,10 @@ import (
 )
 
 type (
+	ChangePage struct {
+		Page enums.Page
+	}
+
 	ShowLoader struct{}
 
 	HideLoader struct{}

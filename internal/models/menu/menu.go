@@ -16,10 +16,10 @@ type Menu struct {
 
 func NewMenu(w int, h int) *Menu {
 	opts := map[enums.Page]string{
-		enums.HomePage: "Home",
-		enums.Page2:    "Two",
-		enums.Page3:    "Threes",
-		enums.Page4:    "Four",
+		enums.HomePage:    "Home",
+		enums.DailyPage:   "Daily Tasks",
+		enums.JournalPage: "Journal",
+		enums.Quit:        "Quit",
 	}
 
 	list := NewMenuList(w/3, h/2-1, opts)

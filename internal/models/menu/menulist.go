@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/SourcewareLab/Toney/internal/enums"
+	"github.com/SourcewareLab/Toney/internal/messages"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -17,11 +18,7 @@ type MenuList struct {
 }
 
 func NewMenuList(w int, h int, opts map[enums.Page]string) *MenuList {
-	selections := make([]enums.Page, 0, len(opts))
-
-	for k := range opts {
-		selections = append(selections, k)
-	}
+	selections := []enums.Page{enums.HomePage, enums.DailyPage, enums.JournalPage, enums.Quit}
 
 	return &MenuList{
 		Width:      w,
@@ -50,6 +47,12 @@ func (m *MenuList) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.Selected -= 1
 			}
 			return m, nil
+		case "enter":
+			return m, func() tea.Msg {
+				return messages.ChangePage{
+					Page: m.Selections[m.Selected],
+				}
+			}
 		}
 	}
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/SourcewareLab/Toney/internal/models/daily"
 	filepopup "github.com/SourcewareLab/Toney/internal/models/filePopup"
 	homemodel "github.com/SourcewareLab/Toney/internal/models/homeModel"
 	"github.com/SourcewareLab/Toney/internal/models/menu"
@@ -20,6 +21,7 @@ type RootModel struct {
 	Page          enums.Page
 	Home          *homemodel.HomeModel
 	Menu          *menu.Menu
+	Daily         *daily.Daily
 	CurrentPage   enums.Page
 	ShowPopup     bool
 	FilePopupType enums.PopupType
@@ -41,6 +43,17 @@ func (m RootModel) Init() tea.Cmd {
 
 func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case messages.ChangePage:
+		switch msg.Page {
+		case enums.HomePage:
+			m.CurrentPage = enums.HomePage
+		case enums.DailyPage:
+			m.CurrentPage = enums.DailyPage
+		case enums.JournalPage:
+			m.CurrentPage = enums.JournalPage
+		case enums.Quit:
+			return m, tea.Quit
+		}
 	case messages.ShowLoader:
 		m.isLoading = true
 		return m, nil
@@ -75,10 +88,12 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.Height = msg.Height
 
 		if m.Home != nil { // Checking whether this is an app resize or app open
+			m.Menu.Update(msg)
 			m.Home.Update(msg)
 		} else {
 			m.Home = homemodel.NewHome(msg.Width, msg.Height)
 			m.Menu = menu.NewMenu(msg.Width, msg.Height)
+			m.Daily = daily.NewDaily(msg.Width, msg.Height)
 		}
 
 		m.isLoading = false
@@ -96,6 +111,8 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			_, cmd = m.Menu.Update(msg)
 		case enums.HomePage:
 			_, cmd = m.Home.Update(msg)
+		case enums.DailyPage:
+			_, cmd = m.Daily.Update(msg)
 		}
 	}
 
@@ -116,7 +133,9 @@ func (m *RootModel) View() string {
 		return lipgloss.NewStyle().Background(colors.ColorPalette().Base).Render(m.Home.View())
 	case enums.MenuPage:
 		return m.Menu.View()
+	case enums.DailyPage:
+		return m.Daily.View()
+	default:
+		return lipgloss.NewStyle().Background(lipgloss.Color("#1e1e2e")).Render(m.Home.View())
 	}
-
-	return m.Menu.View()
 }
