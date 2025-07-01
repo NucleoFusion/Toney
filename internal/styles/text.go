@@ -18,7 +18,7 @@ func GetLogo(w int, h int) string {
 const TasksText = `
     ____          _  __          ______              __        
    / __ \ ____ _ (_)/ /__  __   /_  __/____ _ _____ / /__ _____
-  / / / // __  // // // / / /    / /  / __  // ___// //_// ___/
+  / / / // __ '// // // / / /    / /  / __ '// ___// //_// ___/
  / /_/ // /_/ // // // /_/ /    / /  / /_/ /(__  )/ ,<  (__  ) 
 /_____/ \__,_//_//_/ \__, /    /_/   \__,_//____//_/|_|/____/  
                     /____/                                     `
@@ -26,4 +26,32 @@ const TasksText = `
 func GetDailyText(w int, h int) string {
 	return lipgloss.NewStyle().Width(w).Height(h).Foreground(lipgloss.Color("#b4befe")).
 		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(TasksText)
+}
+
+const AddTasks = `
+    ___        __     __   ______              __  
+   /   |  ____/ /____/ /  /_  __/____ _  _____ / /__
+  / /| | / __  // __  /    / /  / __ '// ___// //_/
+ / ___ |/ /_/ // /_/ /    / /  / /_/ /(__  )/ ,<   
+/_/  |_|\__,_/ \__,_/    /_/   \__,_//____//_/|_|  
+                                                   
+`
+
+func GetAddTasks(w int, h int) string {
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(lipgloss.Color("#b4befe")).
+		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(AddTasks)
+}
+
+const SelectStatus = `
+   _____        __             __     _____  __          __              
+  / ___/ ___   / /___   _____ / /_   / ___/ / /_ ____ _ / /_ __  __ _____
+  \__ \ / _ \ / // _ \ / ___// __/   \__ \ / __// __ '// __// / / // ___/
+ ___/ //  __// //  __// /__ / /_    ___/ // /_ / /_/ // /_ / /_/ /(__  ) 
+/____/ \___//_/ \___/ \___/ \__/   /____/ \__/ \__,_/ \__/ \__,_//____/  
+                                                   
+`
+
+func GetSelectStatus(w int, h int) string {
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(lipgloss.Color("#b4befe")).
+		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(SelectStatus)
 }
