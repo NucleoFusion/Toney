@@ -43,6 +43,11 @@ func (m RootModel) Init() tea.Cmd {
 
 func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case messages.TaskPopupMessage:
+		if m.CurrentPage == enums.DailyPage {
+			m.Daily.Update(msg)
+			return m, nil
+		}
 	case messages.ChangePage:
 		switch msg.Page {
 		case enums.HomePage:

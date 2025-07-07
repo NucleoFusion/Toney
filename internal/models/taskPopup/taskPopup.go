@@ -2,29 +2,31 @@ package taskpopup
 
 import (
 	"github.com/SourcewareLab/Toney/internal/enums"
+	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/SourcewareLab/Toney/internal/styles"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type TaskPopup struct {
-	Width  int
-	Height int
-	Type   enums.TaskPopup
-	Form   *Form
-	Select *SelectStatus
-	Title  string
-	Desc   string
-	Status enums.TaskStatus
+	Width      int
+	Height     int
+	Type       enums.TaskPopup
+	Form       *Form
+	Select     *SelectStatus
+	DeleteForm *DeleteForm
+	ShowSelect bool
 }
 
 func NewPopup(w int, h int, typ enums.TaskPopup) *TaskPopup {
 	return &TaskPopup{
-		Width:  w,
-		Height: h,
-		Type:   typ,
-		Form:   NewForm(w, h),
-		Select: NewSelect(w/3, h),
+		Width:      w,
+		Height:     h,
+		Type:       typ,
+		Form:       NewForm(w, h),
+		Select:     NewSelect(w/3, h),
+		DeleteForm: NewDeleteForm(w/3, h),
+		ShowSelect: false,
 	}
 }
 
@@ -33,8 +35,35 @@ func (m *TaskPopup) Init() tea.Cmd {
 }
 
 func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "enter":
+			if m.Type == enums.Create && !m.ShowSelect {
+				m.ShowSelect = true
+				return m, nil
+			}
+			return m, func() tea.Msg {
+				return messages.TaskPopupMessage{ // returning all values, daily.go will handle the logic
+					Title:     m.Form.TitleInput.Value(),
+					Type:      m.Type,
+					Desc:      m.Form.DescInput.Value(),
+					Status:    m.Select.Opts[m.Select.Selected],
+					IsDeleted: m.DeleteForm.isDeleting,
+				}
+			}
+		}
+	}
+
 	switch m.Type {
 	case enums.Create:
+		if m.ShowSelect {
+			updated, _ := m.Select.Update(msg)
+			if sel, ok := updated.(*SelectStatus); ok { // Type matching, cause I cant assign it straightaway
+				m.Select = sel
+				return m, nil
+			}
+		}
 		updated, _ := m.Form.Update(msg)
 		if form, ok := updated.(*Form); ok { // Type matching, cause I cant assign it straightaway
 			m.Form = form
@@ -44,6 +73,12 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		updated, _ := m.Select.Update(msg)
 		if sel, ok := updated.(*SelectStatus); ok { // Type matching, cause I cant assign it straightaway
 			m.Select = sel
+			return m, nil
+		}
+	case enums.Delete:
+		updated, _ := m.DeleteForm.Update(msg)
+		if del, ok := updated.(*DeleteForm); ok { // Type matching, cause I cant assign it straightaway
+			m.DeleteForm = del
 			return m, nil
 		}
 	}
@@ -56,11 +91,21 @@ func (m *TaskPopup) View() string {
 
 	switch m.Type {
 	case enums.Create:
-		view = m.Form.View()
+		if m.ShowSelect {
+			view = lipgloss.JoinVertical(lipgloss.Center,
+				styles.GetSelectStatus(m.Width, m.Height/2),
+				lipgloss.Place(m.Width, m.Height/2, lipgloss.Center, lipgloss.Top, m.Select.View()))
+		} else {
+			view = m.Form.View()
+		}
 	case enums.ChangeStatus:
 		view = lipgloss.JoinVertical(lipgloss.Center,
 			styles.GetSelectStatus(m.Width, m.Height/2),
 			lipgloss.Place(m.Width, m.Height/2, lipgloss.Center, lipgloss.Top, m.Select.View()))
+	case enums.Delete:
+		view = lipgloss.JoinVertical(lipgloss.Center,
+			lipgloss.Place(m.Width, m.Height/2, lipgloss.Center, lipgloss.Center, styles.GetSelectStatus(m.Width, m.Height/3)),
+			lipgloss.Place(m.Width, m.Height/2, lipgloss.Center, lipgloss.Top, m.DeleteForm.View()))
 	}
 	return view
 }
