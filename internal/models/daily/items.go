@@ -20,6 +20,9 @@ type Task struct {
 	TaskTitle string           `json:"title"`
 	TaskDesc  string           `json:"desc"`
 	Status    enums.TaskStatus `json:"status"`
+	// We will not store these data in the file
+	Index    int            `json:"-"` // Point to index in the respective type array
+	TaskType enums.TaskType `json:"-"`
 }
 
 func (m Task) Title() string       { return m.TaskTitle }
@@ -27,15 +30,17 @@ func (m Task) Description() string { return m.TaskDesc }
 func (m Task) FilterValue() string { return m.TaskTitle }
 
 func (m Tasks) ItemsAsList() []list.Item {
-	fmt.Println(m)
-
 	list := make([]list.Item, 0, len(m.Recurring)+len(m.Unique))
 
-	for _, v := range m.Recurring {
+	for i, v := range m.Recurring {
+		v.Index = i
+		v.TaskType = enums.RecurringTask
 		list = append(list, v)
 	}
 
-	for _, v := range m.Unique {
+	for i, v := range m.Unique {
+		v.Index = i
+		v.TaskType = enums.UniqueTask
 		list = append(list, v)
 	}
 

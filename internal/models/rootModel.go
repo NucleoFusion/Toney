@@ -45,8 +45,12 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case messages.TaskPopupMessage:
 		if m.CurrentPage == enums.DailyPage {
-			m.Daily.Update(msg)
-			return m, nil
+			dailypage, cmd := m.Daily.Update(msg)
+			if d, ok := dailypage.(*daily.Daily); ok { // Type matching, cause I cant assign it straightaway
+				m.Daily = d
+				return m, cmd
+			}
+			return m, cmd
 		}
 	case messages.ChangePage:
 		switch msg.Page {
@@ -118,6 +122,8 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			_, cmd = m.Home.Update(msg)
 		case enums.DailyPage:
 			_, cmd = m.Daily.Update(msg)
+		default:
+			fmt.Printf("UNHANDLED MSG: %#v\n", msg)
 		}
 	}
 

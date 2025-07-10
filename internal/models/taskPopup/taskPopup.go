@@ -1,6 +1,8 @@
 package taskpopup
 
 import (
+	"time"
+
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/SourcewareLab/Toney/internal/styles"
@@ -43,7 +45,7 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.ShowSelect = true
 				return m, nil
 			}
-			return m, func() tea.Msg {
+			return m, tea.Tick(time.Millisecond, func(t time.Time) tea.Msg {
 				return messages.TaskPopupMessage{ // returning all values, daily.go will handle the logic
 					Title:     m.Form.TitleInput.Value(),
 					Type:      m.Type,
@@ -51,7 +53,7 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					Status:    m.Select.Opts[m.Select.Selected],
 					IsDeleted: m.DeleteForm.isDeleting,
 				}
-			}
+			})
 		}
 	}
 
