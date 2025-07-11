@@ -72,6 +72,20 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.Delete)
 			m.ShowPopup = true
 			return m, nil
+		case "e":
+			item := m.List.SelectedItem()
+
+			task, ok := item.(Task)
+			if !ok { // Making sure that item is of type Task
+				return m, nil
+			}
+
+			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.Edit)
+			m.Popup.Form.TitleInput.SetValue(task.TaskTitle)
+			m.Popup.Form.DescInput.SetValue(task.TaskDesc)
+
+			m.ShowPopup = true
+			return m, nil
 		}
 	}
 

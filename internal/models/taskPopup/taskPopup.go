@@ -1,8 +1,6 @@
 package taskpopup
 
 import (
-	"time"
-
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/SourcewareLab/Toney/internal/styles"
@@ -45,7 +43,7 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.ShowSelect = true
 				return m, nil
 			}
-			return m, tea.Tick(time.Millisecond, func(t time.Time) tea.Msg {
+			return m, func() tea.Msg {
 				return messages.TaskPopupMessage{ // returning all values, daily.go will handle the logic
 					Title:     m.Form.TitleInput.Value(),
 					Type:      m.Type,
@@ -53,7 +51,7 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					Status:    m.Select.Opts[m.Select.Selected],
 					IsDeleted: m.DeleteForm.isDeleting,
 				}
-			})
+			}
 		}
 	}
 
@@ -83,6 +81,12 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.DeleteForm = del
 			return m, nil
 		}
+	case enums.Edit:
+		updated, _ := m.Form.Update(msg)
+		if form, ok := updated.(*Form); ok { // Type matching, cause I cant assign it straightaway
+			m.Form = form
+			return m, nil
+		}
 	}
 
 	return m, nil
@@ -108,6 +112,9 @@ func (m *TaskPopup) View() string {
 		view = lipgloss.JoinVertical(lipgloss.Center,
 			lipgloss.Place(m.Width, m.Height/2, lipgloss.Center, lipgloss.Center, styles.GetSelectStatus(m.Width, m.Height/3)),
 			lipgloss.Place(m.Width, m.Height/2, lipgloss.Center, lipgloss.Top, m.DeleteForm.View()))
+	case enums.Edit:
+		view = m.Form.View()
 	}
+
 	return view
 }

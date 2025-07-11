@@ -20,7 +20,7 @@ func NewSelect(w int, h int) *SelectStatus {
 	return &SelectStatus{
 		Width:  w,
 		Height: h,
-		Opts:   []enums.TaskStatus{enums.Pending, enums.Started, enums.Complete, enums.Abandoned},
+		Opts:   []enums.TaskStatus{enums.Pending, enums.Started, enums.Abandoned, enums.Complete},
 		TitleMap: map[enums.TaskStatus]string{
 			enums.Started:   "Started",
 			enums.Pending:   "Pending",
