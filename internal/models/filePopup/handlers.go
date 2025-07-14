@@ -47,7 +47,6 @@ func Move(path string, value string) {
 func Rename(path string, value string) {
 	newpathArr := strings.Split(path, "/")
 	newpath := strings.Join(newpathArr[0:len(newpathArr)-1], "/") + "/" + value
-	fmt.Println(newpath)
 	err := os.Rename(path, newpath)
 	if err != nil {
 		fmt.Println(err.Error())

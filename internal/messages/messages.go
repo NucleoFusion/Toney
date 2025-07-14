@@ -6,6 +6,18 @@ import (
 )
 
 type (
+	TaskPopupMessage struct {
+		Type      enums.TaskPopup
+		IsDeleted bool
+		Title     string
+		Desc      string
+		Status    enums.TaskStatus
+	}
+
+	ChangePage struct {
+		Page enums.Page
+	}
+
 	ShowLoader struct{}
 
 	HideLoader struct{}

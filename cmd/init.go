@@ -18,7 +18,7 @@ var initCmd = &cobra.Command{
 			return
 		}
 
-		err = os.MkdirAll(home+"/.toney", 0o755)
+		err = os.MkdirAll(home+"/.toney/.daily", 0o755)
 		if err != nil {
 			fmt.Println("Could not create .toney directory", err.Error())
 			return

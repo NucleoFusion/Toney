@@ -4,8 +4,8 @@ import (
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
-	viewer "github.com/SourcewareLab/Toney/internal/models/Viewer"
 	fileexplorer "github.com/SourcewareLab/Toney/internal/models/fileExplorer"
+	viewer "github.com/SourcewareLab/Toney/internal/models/viewer"
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
