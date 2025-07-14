@@ -1,7 +1,10 @@
 package taskpopup
 
 import (
+	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -11,6 +14,7 @@ import (
 type Form struct {
 	Width      int
 	Height     int
+	Keymap     keymap.TaskFormMap
 	TitleInput textinput.Model
 	DescInput  textarea.Model
 }
@@ -29,6 +33,7 @@ func NewForm(w int, h int) *Form {
 	return &Form{
 		Width:      w,
 		Height:     h,
+		Keymap:     keymap.NewTaskFormMap(),
 		TitleInput: tinput,
 		DescInput:  ta,
 	}
@@ -41,14 +46,14 @@ func (m Form) Init() tea.Cmd {
 func (m *Form) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "ctrl+down":
+		switch {
+		case key.Matches(msg, m.Keymap.MoveDown):
 			if m.TitleInput.Focused() {
 				m.TitleInput.Blur()
 				m.DescInput.Focus()
 			}
 			return m, nil
-		case "ctrl+up":
+		case key.Matches(msg, m.Keymap.MoveUp):
 			if m.DescInput.Focused() {
 				m.DescInput.Blur()
 				m.TitleInput.Focus()
@@ -77,14 +82,14 @@ func (m *Form) View() string {
 
 func (m *Form) InputView() string {
 	return lipgloss.NewStyle().
-		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#45475a")).
-		Foreground(lipgloss.Color("#cdd6f4")).Padding(0, 1).
+		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).
+		Foreground(colors.ColorPalette().Text).Padding(0, 1).
 		Render("Title:" + "\n" + m.TitleInput.View())
 }
 
 func (m *Form) AreaView() string {
 	return lipgloss.NewStyle().
-		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#45475a")).
-		Foreground(lipgloss.Color("#cdd6f4")).Padding(0, 1).PaddingLeft(2).
+		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).
+		Foreground(colors.ColorPalette().Text).Padding(0, 1).PaddingLeft(2).
 		Render(m.DescInput.View())
 }

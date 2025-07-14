@@ -1,10 +1,14 @@
 package daily
 
 import (
+	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/enums"
+	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	taskpopup "github.com/SourcewareLab/Toney/internal/models/taskPopup"
 	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -17,16 +21,26 @@ type Daily struct {
 	Tasks     Tasks
 	Popup     *taskpopup.TaskPopup
 	ShowPopup bool
+	Keymap    keymap.DailyTaskMap
+	Help      help.Model
 }
 
 func NewDaily(w int, h int) *Daily {
 	tasks := GetItems()
 
+	lst := list.New(tasks.ItemsAsList(), TaskDelegate{}, w/2, 2*h/3)
+	km := list.DefaultKeyMap()
+	km.Quit.Unbind()
+	lst.KeyMap = km
+	lst.SetShowHelp(false)
+
 	return &Daily{
 		Width:  w,
 		Height: h,
-		List:   list.New(tasks.ItemsAsList(), TaskDelegate{}, w/2, 2*h/3),
+		List:   lst,
 		Tasks:  tasks,
+		Keymap: keymap.NewDailyTaskMap(),
+		Help:   help.New(),
 	}
 }
 
@@ -59,20 +73,20 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, cmd
 			}
 		}
-		switch msg.String() {
-		case "a":
+		switch {
+		case key.Matches(msg, m.Keymap.CreateTask):
 			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.Create)
 			m.ShowPopup = true
 			return m, nil
-		case "s":
+		case key.Matches(msg, m.Keymap.ChangeStatus):
 			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.ChangeStatus)
 			m.ShowPopup = true
 			return m, nil
-		case "d":
+		case key.Matches(msg, m.Keymap.DeleteTask):
 			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.Delete)
 			m.ShowPopup = true
 			return m, nil
-		case "e":
+		case key.Matches(msg, m.Keymap.EditTask):
 			item := m.List.SelectedItem()
 
 			task, ok := item.(Task)
@@ -86,6 +100,12 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			m.ShowPopup = true
 			return m, nil
+		case key.Matches(msg, m.Keymap.BackToMenu):
+			return m, func() tea.Msg {
+				return messages.ChangePage{
+					Page: enums.MenuPage,
+				}
+			}
 		}
 	}
 
@@ -101,12 +121,30 @@ func (m *Daily) View() string {
 		return m.Popup.View()
 	}
 
-	return lipgloss.JoinVertical(lipgloss.Left,
+	main := lipgloss.JoinVertical(lipgloss.Left,
 		styles.GetDailyText(m.Width, m.Height/3),
 		lipgloss.Place(m.Width, 2*m.Height/3, lipgloss.Center, lipgloss.Center, m.List.View()))
+
+	if len(m.List.Items()) == 0 {
+		main = lipgloss.JoinVertical(lipgloss.Left,
+			styles.GetDailyText(m.Width, m.Height/3),
+			lipgloss.Place(m.Width, 2*m.Height/3, lipgloss.Center, lipgloss.Top,
+				lipgloss.NewStyle().Foreground(colors.ColorPalette().Lavender).Render("You have no Tasks!")))
+	}
+
+	help := lipgloss.NewStyle().PaddingLeft(2).Render(m.Help.View(keymap.NewDynamic(m.Keymap.Bindings())))
+
+	return lipgloss.JoinVertical(lipgloss.Left, main, help)
 }
 
 func (m *Daily) Refresh() {
 	m.Tasks = GetItems()
-	m.List = list.New(m.Tasks.ItemsAsList(), TaskDelegate{}, m.Width/2, 2*m.Height/3)
+
+	lst := list.New(m.Tasks.ItemsAsList(), TaskDelegate{}, m.Width/2, 2*m.Height/3)
+	km := list.DefaultKeyMap()
+	km.Quit.Unbind()
+	lst.KeyMap = km
+	lst.SetShowHelp(false)
+
+	m.List = lst
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/styles"
 	"github.com/charmbracelet/bubbles/list"
@@ -18,6 +19,10 @@ func (d TaskDelegate) Spacing() int                              { return 1 }
 func (d TaskDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 
 func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Item) {
+	if len(m.Items()) == 0 {
+		return
+	}
+
 	t, ok := item.(Task)
 	if !ok {
 		return
@@ -53,9 +58,9 @@ func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Ite
 		BorderLeft(true).BorderBottom(false).BorderRight(false).BorderTop(false)
 
 	if index == m.Index() {
-		text = border.BorderForeground(lipgloss.Color("#b4befe")).Render(text)
+		text = border.BorderForeground(colors.ColorPalette().Lavender).Render(text)
 	} else {
-		text = border.BorderForeground(lipgloss.Color("#45475a")).Render(text)
+		text = border.BorderForeground(colors.ColorPalette().Surface0).Render(text)
 	}
 
 	io.WriteString(w, text)

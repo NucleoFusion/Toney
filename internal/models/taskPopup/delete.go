@@ -3,6 +3,7 @@ package taskpopup
 import (
 	"fmt"
 
+	"github.com/SourcewareLab/Toney/internal/colors"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -46,21 +47,21 @@ func (m *DeleteForm) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *DeleteForm) View() string {
-	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#45475a")).Render(m.GetText())
+	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).Render(m.GetText())
 }
 
 func (m DeleteForm) GetText() string {
 	yes := "Yes"
 	no := "No"
-	style := lipgloss.NewStyle().Width(m.Width).Foreground(lipgloss.Color("#b4befe"))
+	style := lipgloss.NewStyle().Width(m.Width).Foreground(colors.ColorPalette().Lavender)
 
 	if m.isDeleting {
-		yes = style.Background(lipgloss.Color("#b4befe")).
-			Foreground(lipgloss.Color("#1e1e2e")).
+		yes = style.Background(colors.ColorPalette().Lavender).
+			Foreground(colors.ColorPalette().Base).
 			Render(yes)
 	} else {
-		no = style.Background(lipgloss.Color("#b4befe")).
-			Foreground(lipgloss.Color("#1e1e2e")).
+		no = style.Background(colors.ColorPalette().Lavender).
+			Foreground(colors.ColorPalette().Base).
 			Render(no)
 	}
 

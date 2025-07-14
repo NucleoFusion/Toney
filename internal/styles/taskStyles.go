@@ -1,6 +1,9 @@
 package styles
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/charmbracelet/lipgloss"
+)
 
 type TaskStyle struct {
 	Title lipgloss.Style
@@ -8,21 +11,21 @@ type TaskStyle struct {
 }
 
 var CompletedStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(lipgloss.Color("#a6e3a1")),
-	Desc:  lipgloss.NewStyle().Foreground(lipgloss.Color("#5a7a57")),
+	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Green),
+	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().GreenDull),
 }
 
 var StartedStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(lipgloss.Color("#f9e2af")),
-	Desc:  lipgloss.NewStyle().Foreground(lipgloss.Color("#a38e65")),
+	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Yellow),
+	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().YellowDull),
 }
 
 var AbandonedStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(lipgloss.Color("#f38ba8")),
-	Desc:  lipgloss.NewStyle().Foreground(lipgloss.Color("#894454")),
+	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Red),
+	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().RedDull),
 }
 
 var PendingStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(lipgloss.Color("#6c7086")),
-	Desc:  lipgloss.NewStyle().Foreground(lipgloss.Color("#585b70")),
+	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Overlay0),
+	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().Surface0),
 }

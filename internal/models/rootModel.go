@@ -54,6 +54,8 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case messages.ChangePage:
 		switch msg.Page {
+		case enums.MenuPage:
+			m.CurrentPage = enums.MenuPage
 		case enums.HomePage:
 			m.CurrentPage = enums.HomePage
 		case enums.DailyPage:
@@ -147,6 +149,6 @@ func (m *RootModel) View() string {
 	case enums.DailyPage:
 		return m.Daily.View()
 	default:
-		return lipgloss.NewStyle().Background(lipgloss.Color("#1e1e2e")).Render(m.Home.View())
+		return lipgloss.NewStyle().Background(colors.ColorPalette().Base).Render(m.Home.View())
 	}
 }

@@ -3,6 +3,7 @@ package menu
 import (
 	"strings"
 
+	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	tea "github.com/charmbracelet/bubbletea"
@@ -60,18 +61,18 @@ func (m *MenuList) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *MenuList) View() string {
-	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#45475a")).Render(m.GetText())
+	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).Render(m.GetText())
 }
 
 func (m *MenuList) GetText() string {
 	text := ""
-	style := lipgloss.NewStyle().Width(m.Width).Padding(0, 2).Foreground(lipgloss.Color("#b4befe"))
+	style := lipgloss.NewStyle().Width(m.Width).Padding(0, 2).Foreground(colors.ColorPalette().Lavender)
 
 	for idx, val := range m.Selections {
 		line := m.Options[val]
 		if m.Selected == idx {
-			text += style.Background(lipgloss.Color("#b4befe")).
-				Foreground(lipgloss.Color("#1e1e2e")).
+			text += style.Background(colors.ColorPalette().Lavender).
+				Foreground(colors.ColorPalette().Base).
 				Render(line) + "\n"
 
 			continue

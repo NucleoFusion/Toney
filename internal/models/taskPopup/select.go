@@ -3,6 +3,7 @@ package taskpopup
 import (
 	"strings"
 
+	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -55,18 +56,18 @@ func (m *SelectStatus) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *SelectStatus) View() string {
-	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(lipgloss.Color("#45475a")).Render(m.GetText())
+	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).Render(m.GetText())
 }
 
 func (m SelectStatus) GetText() string {
 	text := ""
-	style := lipgloss.NewStyle().Width(m.Width).Padding(0, 2).Foreground(lipgloss.Color("#b4befe"))
+	style := lipgloss.NewStyle().Width(m.Width).Padding(0, 2).Foreground(colors.ColorPalette().Lavender)
 
 	for idx, val := range m.Opts {
 		line := m.Opts[val]
 		if m.Selected == idx {
-			text += style.Background(lipgloss.Color("#b4befe")).
-				Foreground(lipgloss.Color("#1e1e2e")).
+			text += style.Background(colors.ColorPalette().Lavender).
+				Foreground(colors.ColorPalette().Base).
 				Render(m.TitleMap[line]) + "\n"
 
 			continue

@@ -1,6 +1,9 @@
 package styles
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/charmbracelet/lipgloss"
+)
 
 const LogoText = `
   ______                      
@@ -12,7 +15,7 @@ const LogoText = `
 `
 
 func GetLogo(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(lipgloss.Color("#b4befe")).Align(lipgloss.Center, lipgloss.Center).Render(LogoText)
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).Align(lipgloss.Center, lipgloss.Center).Render(LogoText)
 }
 
 const TasksText = `
@@ -24,7 +27,7 @@ const TasksText = `
                     /____/                                     `
 
 func GetDailyText(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(lipgloss.Color("#b4befe")).
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).
 		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(TasksText)
 }
 
@@ -38,7 +41,7 @@ const AddTasks = `
 `
 
 func GetAddTasks(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(lipgloss.Color("#b4befe")).
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).
 		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(AddTasks)
 }
 
@@ -52,6 +55,6 @@ const SelectStatus = `
 `
 
 func GetSelectStatus(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(lipgloss.Color("#b4befe")).
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).
 		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(SelectStatus)
 }

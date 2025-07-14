@@ -2,8 +2,11 @@ package taskpopup
 
 import (
 	"github.com/SourcewareLab/Toney/internal/enums"
+	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/key"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -12,6 +15,8 @@ type TaskPopup struct {
 	Width      int
 	Height     int
 	Type       enums.TaskPopup
+	Keymap     keymap.TaskPopupMap
+	Help       help.Model
 	Form       *Form
 	Select     *SelectStatus
 	DeleteForm *DeleteForm
@@ -23,6 +28,8 @@ func NewPopup(w int, h int, typ enums.TaskPopup) *TaskPopup {
 		Width:      w,
 		Height:     h,
 		Type:       typ,
+		Keymap:     keymap.NewTaskPopupMap(),
+		Help:       help.New(),
 		Form:       NewForm(w, h),
 		Select:     NewSelect(w/3, h),
 		DeleteForm: NewDeleteForm(w/3, h),
@@ -37,8 +44,8 @@ func (m *TaskPopup) Init() tea.Cmd {
 func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "enter":
+		switch {
+		case key.Matches(msg, m.Keymap.Enter):
 			if m.Type == enums.Create && !m.ShowSelect {
 				m.ShowSelect = true
 				return m, nil
@@ -51,6 +58,10 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					Status:    m.Select.Opts[m.Select.Selected],
 					IsDeleted: m.DeleteForm.isDeleting,
 				}
+			}
+		case key.Matches(msg, m.Keymap.Exit):
+			return m, func() tea.Msg {
+				return messages.TaskPopupMessage{Type: enums.ClosePopup} // closes the popup
 			}
 		}
 	}
@@ -116,5 +127,10 @@ func (m *TaskPopup) View() string {
 		view = m.Form.View()
 	}
 
-	return view
+	binds := m.Keymap.Bindings()
+	if m.Type == enums.Create || m.Type == enums.Edit {
+		binds = append(binds, m.Form.Keymap.Bindings()...)
+	}
+
+	return lipgloss.JoinVertical(lipgloss.Center, view, m.Help.View(keymap.NewDynamic(binds)))
 }
