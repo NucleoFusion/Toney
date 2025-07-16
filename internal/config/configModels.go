@@ -1,11 +1,12 @@
 package config
 
-type StylesConfig struct {
-	FocusedBorder string `mapstructure:"focused_border"`
-	NormalBorder  string `mapstructure:"normal_border"`
-	Text          string `mapstructure:"text"`
+type Config struct {
+	General  GeneralConfig  `mapstructure:"general"`
+	Styles   StylesConfig   `mapstructure:"styles"`
+	Keybinds KeybindsConfig `mapstructure:"keybinds"`
 }
 
-type Config struct {
-	Styles StylesConfig `mapstructure:"styles"`
+type GeneralConfig struct {
+	Editor   string `mapstructure:"editor"`
+	NotesDir string `mapstructure:"notes_dir"`
 }
