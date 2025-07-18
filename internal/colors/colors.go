@@ -36,10 +36,6 @@ type Colors struct {
 	YellowDull lipgloss.Color
 }
 
-// func GetColor(p *Colors , colorName string) lipgloss.Color {
-// 	return p.colorPallate().Base
-// }
-
 func ColorPalette() Colors {
 	return Colors{
 		Rosewater:  lipgloss.Color("#f5e0dc"),
@@ -68,7 +64,7 @@ func ColorPalette() Colors {
 		Mantle:     lipgloss.Color("#181825"),
 		Crust:      lipgloss.Color("#11111b"),
 		RedDull:    lipgloss.Color("#894454"),
-		GreenDull:  lipgloss.Color("#a38e65"),
-		YellowDull: lipgloss.Color("#5a7a57"),
+		YellowDull: lipgloss.Color("#a38e65"),
+		GreenDull:  lipgloss.Color("#5a7a57"),
 	}
 }

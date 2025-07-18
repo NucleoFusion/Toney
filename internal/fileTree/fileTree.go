@@ -5,7 +5,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/charmbracelet/lipgloss"
 )
 
 func CreateTree() (*Node, error) {
@@ -70,9 +72,10 @@ func BuildNodeTree(n *Node, prefix string, isLast bool, curr *Node) string {
 		line = prefix + branch + icon + " " + n.Name
 	}
 
-	// Style current node
 	if n == curr {
 		line = styles.CurrentNodeStyle.Render(line)
+	} else {
+		line = lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Render(line)
 	}
 
 	sb.WriteString(line + "\n")

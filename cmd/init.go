@@ -24,6 +24,18 @@ var initCmd = &cobra.Command{
 			return
 		}
 
+		err = os.MkdirAll(home+"/.config/toney", 0o755)
+		if err != nil {
+			fmt.Println("Could not create config directory", err.Error())
+			return
+		}
+
+		_, err = os.Create(home + "/.config/toney/config.toml")
+		if err != nil {
+			fmt.Println("Could not create config file", err.Error())
+			return
+		}
+
 		fmt.Println("Toney setup was succesfull!")
 	},
 }

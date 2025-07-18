@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
 
@@ -23,6 +24,7 @@ type Viewer struct {
 	Ready     bool
 	Path      string
 	isEditing bool
+	Renderer  *glamour.TermRenderer
 	Keymap    keymap.ViewerKeyMap
 }
 
@@ -35,7 +37,13 @@ func NewViewer(w int, h int) *Viewer {
 		MarginTop(1).
 		Padding(1, 1).
 		BorderForeground(colors.ColorPalette().Surface1)
-	vp.SetContent("Select a file to view its contents")
+	vp.SetContent(
+		lipgloss.Place(w*3/4, h-2, lipgloss.Center, lipgloss.Center,
+			lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Render("Select a file to view its contents"),
+		))
+
+	r, _ := glamour.NewTermRenderer(glamour.WithStyles(config.ToGlamourStyle(config.AppConfig.Styles.Renderer)),
+		glamour.WithWordWrap(w*3/4-2))
 
 	return &Viewer{
 		Viewport:  vp,
@@ -43,6 +51,7 @@ func NewViewer(w int, h int) *Viewer {
 		Width:     w,
 		isEditing: false,
 		Keymap:    keymap.NewViewerKeyMap(),
+		Renderer:  r,
 	}
 }
 
@@ -115,7 +124,7 @@ func (m *Viewer) ReadFile(raw bool) string { // Change to editor type when confi
 }
 
 func (m *Viewer) RenderMarkdown(md string, width int) string {
-	out, _ := glamour.Render(md, "dark")
+	out, _ := m.Renderer.Render(md)
 
 	return out
 }
