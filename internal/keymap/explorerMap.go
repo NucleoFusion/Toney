@@ -1,6 +1,9 @@
 package keymap
 
-import "github.com/charmbracelet/bubbles/key"
+import (
+	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/charmbracelet/bubbles/key"
+)
 
 type ExplorerKeyMap struct {
 	CreateFile  key.Binding
@@ -13,33 +16,35 @@ type ExplorerKeyMap struct {
 }
 
 func NewExplorerKeyMap() ExplorerKeyMap {
+	cfg := config.AppConfig.Keybinds.Home
+
 	return ExplorerKeyMap{
 		CreateFile: key.NewBinding(
-			key.WithKeys("c"),
-			key.WithHelp("c", "create"),
+			key.WithKeys(cfg.Create),
+			key.WithHelp(cfg.Create, "create"),
 		),
 		MoveFile: key.NewBinding(
-			key.WithKeys("m"),
-			key.WithHelp("m", "move"),
+			key.WithKeys(cfg.Move),
+			key.WithHelp(cfg.Move, "move"),
 		),
 		RenameFile: key.NewBinding(
-			key.WithKeys("r"),
-			key.WithHelp("r", "rename"),
+			key.WithKeys(cfg.Rename),
+			key.WithHelp(cfg.Rename, "rename"),
 		),
 		DeleteFile: key.NewBinding(
-			key.WithKeys("d"),
-			key.WithHelp("d", "delete"),
+			key.WithKeys(cfg.Delete),
+			key.WithHelp(cfg.Delete, "delete"),
 		),
 		OpenForEdit: key.NewBinding(
-			key.WithKeys("enter"),
-			key.WithHelp("enter", "edit"),
+			key.WithKeys(cfg.Edit),
+			key.WithHelp(cfg.Edit, "edit"),
 		),
 		Up: key.NewBinding(
-			key.WithKeys("up"),
+			key.WithKeys(cfg.ScrollUp),
 			key.WithHelp("↑", "up"),
 		),
 		Down: key.NewBinding(
-			key.WithKeys("down"),
+			key.WithKeys(cfg.ScrollDown),
 			key.WithHelp("↓", "down"),
 		),
 	}

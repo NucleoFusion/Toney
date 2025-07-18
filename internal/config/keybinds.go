@@ -18,6 +18,7 @@ type DailyKeybinds struct {
 }
 
 type HomeKeybinds struct {
+	BackToMenu    string `mapstructure:"return_to_menu"`
 	FocusViewer   string `mapstructure:"focus_viewer"`
 	FocusExplorer string `mapstructure:"focus_explorer"`
 	Create        string `mapstructure:"create"`

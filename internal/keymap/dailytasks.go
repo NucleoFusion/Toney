@@ -3,6 +3,7 @@ package keymap
 import (
 	"reflect"
 
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/charmbracelet/bubbles/key"
 )
 
@@ -15,26 +16,27 @@ type DailyTaskMap struct {
 }
 
 func NewDailyTaskMap() DailyTaskMap {
+	cfg := config.AppConfig.Keybinds.Daily
 	return DailyTaskMap{
 		CreateTask: key.NewBinding(
-			key.WithKeys("c"),
-			key.WithHelp("c", "create"),
+			key.WithKeys(cfg.Create),
+			key.WithHelp(cfg.Create, "create"),
 		),
 		EditTask: key.NewBinding(
-			key.WithKeys("e"),
-			key.WithHelp("e", "edit"),
+			key.WithKeys(cfg.Edit),
+			key.WithHelp(cfg.Edit, "edit"),
 		),
 		ChangeStatus: key.NewBinding(
-			key.WithKeys("s"),
-			key.WithHelp("s", "status change"),
+			key.WithKeys(cfg.StatusChange),
+			key.WithHelp(cfg.StatusChange, "status change"),
 		),
 		DeleteTask: key.NewBinding(
-			key.WithKeys("d"),
-			key.WithHelp("d", "delete"),
+			key.WithKeys(cfg.Delete),
+			key.WithHelp(cfg.Delete, "delete"),
 		),
 		BackToMenu: key.NewBinding(
-			key.WithKeys("esc"),
-			key.WithHelp("esc", "return to menu"),
+			key.WithKeys(cfg.BackToMenu),
+			key.WithHelp(cfg.BackToMenu, "return to menu"),
 		),
 	}
 }

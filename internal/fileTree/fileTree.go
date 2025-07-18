@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/styles"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -13,7 +14,7 @@ import (
 func CreateTree() (*Node, error) {
 	home, _ := os.UserHomeDir()
 
-	root, err := buildTree(nil, filepath.Join(home, ".toney"), 0)
+	root, err := buildTree(nil, filepath.Join(home, config.AppConfig.General.NotesDir), 0)
 	if err != nil {
 		return nil, err
 	}

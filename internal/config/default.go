@@ -5,8 +5,8 @@ import "github.com/charmbracelet/lipgloss"
 func DefaultConfig() Config {
 	return Config{
 		General: GeneralConfig{
-			Editor:   "nvim",
-			NotesDir: ".toney", // From $HOME Directory
+			Editor:   "nvim",   // X
+			NotesDir: ".toney", // X From $HOME Directory
 		},
 		Keybinds: KeybindsConfig{
 			Home: HomeKeybinds{
@@ -19,6 +19,7 @@ func DefaultConfig() Config {
 				Move:          "m",
 				Delete:        "d",
 				Edit:          "enter",
+				BackToMenu:    "esc",
 			},
 			Daily: DailyKeybinds{
 				Create:       "c",

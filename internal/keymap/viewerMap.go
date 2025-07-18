@@ -1,6 +1,9 @@
 package keymap
 
-import "github.com/charmbracelet/bubbles/key"
+import (
+	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/charmbracelet/bubbles/key"
+)
 
 type ViewerKeyMap struct {
 	ScrollUp   key.Binding
@@ -8,13 +11,14 @@ type ViewerKeyMap struct {
 }
 
 func NewViewerKeyMap() ViewerKeyMap {
+	cfg := config.AppConfig.Keybinds.Home
 	return ViewerKeyMap{
 		ScrollUp: key.NewBinding(
-			key.WithKeys("up"),
+			key.WithKeys(cfg.ScrollUp),
 			key.WithHelp("↑", "scroll up"),
 		),
 		ScrollDown: key.NewBinding(
-			key.WithKeys("down"),
+			key.WithKeys(cfg.ScrollDown),
 			key.WithHelp("↓", "scroll down"),
 		),
 	}

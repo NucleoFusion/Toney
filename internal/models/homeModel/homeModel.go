@@ -65,6 +65,10 @@ func (m *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, m.Keymap.FocusViewer):
 			m.FocusOn = enums.FViewer
 			return m, nil
+		case key.Matches(msg, m.Keymap.BackToMenu):
+			return m, func() tea.Msg {
+				return messages.ChangePage{Page: enums.MenuPage}
+			}
 		default:
 			switch m.FocusOn {
 			case enums.FViewer:
@@ -82,7 +86,7 @@ func (m HomeModel) View() string {
 	m.FileExplorer.IsFocused = false
 	m.Viewer.IsFocused = false
 
-	bindings := []key.Binding{m.Keymap.FocusExplorer, m.Keymap.FocusViewer}
+	bindings := []key.Binding{m.Keymap.FocusExplorer, m.Keymap.FocusViewer, m.Keymap.BackToMenu}
 
 	if m.FocusOn == enums.File {
 		m.FileExplorer.IsFocused = true

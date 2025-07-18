@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/charmbracelet/bubbles/list"
 )
@@ -84,5 +85,5 @@ func GetPath() string {
 	home, _ := os.UserHomeDir()
 	date := time.Now().Format("2006-01-02")
 
-	return filepath.Join(home, ".toney", ".daily", date)
+	return filepath.Join(home, config.AppConfig.General.NotesDir, ".daily", date)
 }
