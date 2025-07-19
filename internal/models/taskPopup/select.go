@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -39,12 +40,12 @@ func (m *SelectStatus) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "down":
+		case config.AppConfig.Keybinds.Global.Down:
 			if m.Selected < len(m.Opts)-1 {
 				m.Selected += 1
 			}
 			return m, nil
-		case "up":
+		case config.AppConfig.Keybinds.Global.Up:
 			if m.Selected > 0 {
 				m.Selected -= 1
 			}

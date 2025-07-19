@@ -1,8 +1,14 @@
 package config
 
 type KeybindsConfig struct {
-	Home  HomeKeybinds  `mapstructure:"home"`
-	Daily DailyKeybinds `mapstructure:"daily"`
+	Global GlobalKeybinds `mapstructure:"global"`
+	Home   HomeKeybinds   `mapstructure:"home"`
+	Daily  DailyKeybinds  `mapstructure:"daily"`
+}
+
+type GlobalKeybinds struct {
+	Up   string `mapstructure:"up"`
+	Down string `mapstructure:"down"`
 }
 
 type DailyKeybinds struct {

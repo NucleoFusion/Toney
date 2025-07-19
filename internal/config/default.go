@@ -9,6 +9,10 @@ func DefaultConfig() Config {
 			NotesDir: ".toney", // From $HOME Directory
 		},
 		Keybinds: KeybindsConfig{
+			Global: GlobalKeybinds{
+				Up:   "up",
+				Down: "down",
+			},
 			Home: HomeKeybinds{
 				FocusViewer:   "V",
 				FocusExplorer: "F",
