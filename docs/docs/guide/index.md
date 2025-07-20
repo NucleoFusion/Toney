@@ -23,8 +23,8 @@ No GUI bloat, just a minimalist note-taking app - fast and most importantly, _yo
 
 ## Next Steps
 
-→ Jump to the [Installation](/docs/install) section to start taking notes today.  
-→ Or peek into the [Configuration](/docs/config) page to make Toney your own.
+→ Jump to the [Installation](/guide/install) section to start taking notes today.  
+→ Or peek into the [Configuration](/config/) page to make Toney your own.
 
 <br>
 

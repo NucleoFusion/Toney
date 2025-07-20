@@ -8,6 +8,8 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#0f172a' }]
   ],
+  appearance: false,
+  base: '/Toney/',
   themeConfig: {
     outline: 'deep',
     footer: {
