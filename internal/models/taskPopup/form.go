@@ -82,14 +82,14 @@ func (m *Form) View() string {
 
 func (m *Form) InputView() string {
 	return lipgloss.NewStyle().
-		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).
+		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Border).
 		Foreground(colors.ColorPalette().Text).Padding(0, 1).
 		Render("Title:" + "\n" + m.TitleInput.View())
 }
 
 func (m *Form) AreaView() string {
 	return lipgloss.NewStyle().
-		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).
+		BorderStyle(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Border).
 		Foreground(colors.ColorPalette().Text).Padding(0, 1).PaddingLeft(2).
 		Render(m.DescInput.View())
 }

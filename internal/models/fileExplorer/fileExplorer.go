@@ -130,11 +130,11 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m FileExplorer) View() string {
-	style := styles.BorderStyle
+	style := styles.BorderStyle()
 	style = style.Align(lipgloss.Left, lipgloss.Top)
 
 	if m.IsFocused {
-		style = style.BorderForeground(colors.ColorPalette().Lavender)
+		style = style.BorderForeground(colors.ColorPalette().FocusedBorder)
 	}
 
 	w := (m.Width / 4) - 1

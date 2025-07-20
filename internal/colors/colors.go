@@ -1,70 +1,56 @@
 package colors
 
 import (
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/charmbracelet/lipgloss"
 )
 
 type Colors struct {
-	Rosewater lipgloss.Color
-	Flamingo  lipgloss.Color
-	Pink      lipgloss.Color
-	Red       lipgloss.Color
-	Maroon    lipgloss.Color
-	Peach     lipgloss.Color
-	Yellow    lipgloss.Color
-	Green     lipgloss.Color
-	Teal      lipgloss.Color
-	Sky       lipgloss.Color
-	Sapphire  lipgloss.Color
-	Blue      lipgloss.Color
-	Lavender  lipgloss.Color
-	Text      lipgloss.Color
-	Subtext1  lipgloss.Color
-	Subtext0  lipgloss.Color
-	Overlay2  lipgloss.Color
-	Overlay1  lipgloss.Color
-	Overlay0  lipgloss.Color
-	Surface2  lipgloss.Color
-	Surface1  lipgloss.Color
-	Surface0  lipgloss.Color
-	Base      lipgloss.Color
-	Mantle    lipgloss.Color
-	Crust     lipgloss.Color
-	// Dull Colors
-	RedDull    lipgloss.Color
-	GreenDull  lipgloss.Color
-	YellowDull lipgloss.Color
+	Text             lipgloss.Color
+	Background       lipgloss.Color
+	Border           lipgloss.Color
+	FocusedBorder    lipgloss.Color
+	MenuSelectedBg   lipgloss.Color
+	MenuSelectedText lipgloss.Color
+	TaskFocusedBar   lipgloss.Color
+	TaskUnfocusedBar lipgloss.Color
+	CompletedTask    TaskColors
+	AbandonedTask    TaskColors
+	PendingTask      TaskColors
+	StartedTask      TaskColors
+}
+
+type TaskColors struct {
+	TaskTitle lipgloss.Color
+	TaskDesc  lipgloss.Color
 }
 
 func ColorPalette() Colors {
+	cfg := config.AppConfig.Styles
 	return Colors{
-		Rosewater:  lipgloss.Color("#f5e0dc"),
-		Flamingo:   lipgloss.Color("#f2cdcd"),
-		Pink:       lipgloss.Color("##f5c2e7"),
-		Red:        lipgloss.Color("#f38ba8"),
-		Maroon:     lipgloss.Color("#eba0ac"),
-		Peach:      lipgloss.Color("#fab387"),
-		Yellow:     lipgloss.Color("#f9e2af"),
-		Green:      lipgloss.Color("#a6e3a1"),
-		Teal:       lipgloss.Color("#94e2d5"),
-		Sky:        lipgloss.Color("#89dceb"),
-		Sapphire:   lipgloss.Color("#74c7ec"),
-		Blue:       lipgloss.Color("#89b4fa"),
-		Lavender:   lipgloss.Color("#b4befe"),
-		Text:       lipgloss.Color("#cdd6f4"),
-		Subtext1:   lipgloss.Color("#bac2de"),
-		Subtext0:   lipgloss.Color("#a6adc8"),
-		Overlay2:   lipgloss.Color("#9399b2"),
-		Overlay1:   lipgloss.Color("#7f849c"),
-		Overlay0:   lipgloss.Color("#6c7086"),
-		Surface2:   lipgloss.Color("#585b70"),
-		Surface1:   lipgloss.Color("#45475a"),
-		Surface0:   lipgloss.Color("#313244"),
-		Base:       lipgloss.Color("#1e1e2e"),
-		Mantle:     lipgloss.Color("#181825"),
-		Crust:      lipgloss.Color("#11111b"),
-		RedDull:    lipgloss.Color("#894454"),
-		YellowDull: lipgloss.Color("#a38e65"),
-		GreenDull:  lipgloss.Color("#5a7a57"),
+		Text:             lipgloss.Color(cfg.Text),
+		Background:       lipgloss.Color(cfg.Background),
+		Border:           lipgloss.Color(cfg.Border),
+		FocusedBorder:    lipgloss.Color(cfg.FocusedBorder),
+		TaskFocusedBar:   lipgloss.Color(cfg.TaskStyles.FocusedBar),
+		TaskUnfocusedBar: lipgloss.Color(cfg.TaskStyles.UnfocusedBar),
+		MenuSelectedBg:   lipgloss.Color(cfg.MenuSelectedBg),
+		MenuSelectedText: lipgloss.Color(cfg.MenuSelectedText),
+		CompletedTask: TaskColors{
+			TaskTitle: lipgloss.Color(cfg.TaskStyles.CompletedStyle.Title),
+			TaskDesc:  lipgloss.Color(cfg.TaskStyles.CompletedStyle.Desc),
+		},
+		AbandonedTask: TaskColors{
+			TaskTitle: lipgloss.Color(cfg.TaskStyles.AbandonedStyle.Title),
+			TaskDesc:  lipgloss.Color(cfg.TaskStyles.AbandonedStyle.Desc),
+		},
+		PendingTask: TaskColors{
+			TaskTitle: lipgloss.Color(cfg.TaskStyles.PendingStyle.Title),
+			TaskDesc:  lipgloss.Color(cfg.TaskStyles.PendingStyle.Desc),
+		},
+		StartedTask: TaskColors{
+			TaskTitle: lipgloss.Color(cfg.TaskStyles.StartedStyle.Title),
+			TaskDesc:  lipgloss.Color(cfg.TaskStyles.StartedStyle.Desc),
+		},
 	}
 }

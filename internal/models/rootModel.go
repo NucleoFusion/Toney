@@ -143,12 +143,12 @@ func (m *RootModel) View() string {
 
 	switch m.CurrentPage {
 	case enums.HomePage:
-		return lipgloss.NewStyle().Background(colors.ColorPalette().Base).Render(m.Home.View())
+		return lipgloss.NewStyle().Background(colors.ColorPalette().Background).Render(m.Home.View())
 	case enums.MenuPage:
 		return m.Menu.View()
 	case enums.DailyPage:
 		return m.Daily.View()
 	default:
-		return lipgloss.NewStyle().Background(colors.ColorPalette().Base).Render(m.Home.View())
+		return lipgloss.NewStyle().Background(colors.ColorPalette().Background).Render(m.Home.View())
 	}
 }

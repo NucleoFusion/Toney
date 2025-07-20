@@ -15,7 +15,7 @@ const LogoText = `
 `
 
 func GetLogo(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).Align(lipgloss.Center, lipgloss.Center).Render(LogoText)
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Text).Align(lipgloss.Center, lipgloss.Center).Render(LogoText)
 }
 
 const TasksText = `
@@ -27,7 +27,7 @@ const TasksText = `
                     /____/                                     `
 
 func GetDailyText(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Text).
 		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(TasksText)
 }
 
@@ -41,7 +41,7 @@ const AddTasks = `
 `
 
 func GetAddTasks(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Text).
 		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(AddTasks)
 }
 
@@ -55,6 +55,6 @@ const SelectStatus = `
 `
 
 func GetSelectStatus(w int, h int) string {
-	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Lavender).
+	return lipgloss.NewStyle().Width(w).Height(h).Foreground(colors.ColorPalette().Text).
 		PaddingTop(2).Align(lipgloss.Center, lipgloss.Top).Render(SelectStatus)
 }

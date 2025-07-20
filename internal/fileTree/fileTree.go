@@ -7,7 +7,6 @@ import (
 
 	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/config"
-	"github.com/SourcewareLab/Toney/internal/styles"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -58,9 +57,9 @@ func BuildNodeTree(n *Node, prefix string, isLast bool, curr *Node) string {
 		branch = "└─ "
 	}
 
-	icon := "📄"
+	icon := config.AppConfig.Styles.Icons.FileIcon
 	if n.IsDirectory {
-		icon = "📁"
+		icon = config.AppConfig.Styles.Icons.FolderIcon
 	}
 
 	newPrefix := prefix
@@ -74,7 +73,8 @@ func BuildNodeTree(n *Node, prefix string, isLast bool, curr *Node) string {
 	}
 
 	if n == curr {
-		line = styles.CurrentNodeStyle.Render(line)
+		line = lipgloss.NewStyle().Background(colors.ColorPalette().MenuSelectedBg).
+			Foreground(colors.ColorPalette().MenuSelectedText).Render(line)
 	} else {
 		line = lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Render(line)
 	}

@@ -53,7 +53,7 @@ func NewTaskFormMap() TaskFormMap {
 			key.WithHelp(cfg.FormUp, "Move Up"),
 		),
 		MoveDown: key.NewBinding(
-			key.WithKeys(cfg.FormUp),
+			key.WithKeys(cfg.FormDown),
 			key.WithHelp(cfg.FormDown, "Move Down"),
 		),
 	}

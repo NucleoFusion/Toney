@@ -5,6 +5,7 @@ import (
 	"io"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/styles"
 	"github.com/charmbracelet/bubbles/list"
@@ -29,27 +30,28 @@ func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Ite
 	}
 
 	text := ""
+	cfg := config.AppConfig.Styles.Icons.TaskIcons
 
 	switch t.Status {
 	case enums.Complete:
 		text += fmt.Sprintf("%s\n%s",
-			styles.CompletedStyle.Title.Render(fmt.Sprintf("%s | %s", "✓", t.Title())),
-			styles.CompletedStyle.Desc.Render(t.Description()),
+			styles.CompletedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.CompletedIcon, t.Title())),
+			styles.CompletedStyle().Desc.Render(t.Description()),
 		)
 	case enums.Pending:
 		text += fmt.Sprintf("%s\n%s",
-			styles.PendingStyle.Title.Render(fmt.Sprintf("%s | %s", "~", t.Title())),
-			styles.PendingStyle.Desc.Render(t.Description()),
+			styles.PendingStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.PendingIcon, t.Title())),
+			styles.PendingStyle().Desc.Render(t.Description()),
 		)
 	case enums.Started:
 		text += fmt.Sprintf("%s\n%s",
-			styles.StartedStyle.Title.Render(fmt.Sprintf("%s | %s", "○", t.Title())),
-			styles.StartedStyle.Desc.Render(t.Description()),
+			styles.StartedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.StartedIcon, t.Title())),
+			styles.StartedStyle().Desc.Render(t.Description()),
 		)
 	case enums.Abandoned:
 		text += fmt.Sprintf("%s\n%s",
-			styles.AbandonedStyle.Title.Render(fmt.Sprintf("%s | %s", "×", t.Title())),
-			styles.AbandonedStyle.Desc.Render(t.Description()),
+			styles.AbandonedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.AbandonedIcon, t.Title())),
+			styles.AbandonedStyle().Desc.Render(t.Description()),
 		)
 	}
 
@@ -58,9 +60,9 @@ func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Ite
 		BorderLeft(true).BorderBottom(false).BorderRight(false).BorderTop(false)
 
 	if index == m.Index() {
-		text = border.BorderForeground(colors.ColorPalette().Lavender).Render(text)
+		text = border.BorderForeground(colors.ColorPalette().TaskFocusedBar).Render(text)
 	} else {
-		text = border.BorderForeground(colors.ColorPalette().Surface0).Render(text)
+		text = border.BorderForeground(colors.ColorPalette().TaskUnfocusedBar).Render(text)
 	}
 
 	io.WriteString(w, text)

@@ -36,7 +36,7 @@ func NewViewer(w int, h int) *Viewer {
 		BorderStyle(lipgloss.RoundedBorder()).
 		MarginTop(1).
 		Padding(1, 1).
-		BorderForeground(colors.ColorPalette().Surface1)
+		BorderForeground(colors.ColorPalette().Border)
 	vp.SetContent(
 		lipgloss.Place(w*3/4, h-2, lipgloss.Center, lipgloss.Center,
 			lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Render("Select a file to view its contents"),
@@ -93,9 +93,9 @@ func (m *Viewer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Viewer) View() string {
 	if m.IsFocused {
-		m.Viewport.Style = m.Viewport.Style.BorderForeground(colors.ColorPalette().Lavender)
+		m.Viewport.Style = m.Viewport.Style.BorderForeground(colors.ColorPalette().FocusedBorder)
 	} else {
-		m.Viewport.Style = m.Viewport.Style.BorderForeground(colors.ColorPalette().Surface1)
+		m.Viewport.Style = m.Viewport.Style.BorderForeground(colors.ColorPalette().Border)
 	}
 
 	return m.Viewport.View()

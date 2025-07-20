@@ -62,18 +62,18 @@ func (m *MenuList) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *MenuList) View() string {
-	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).Render(m.GetText())
+	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Border).Render(m.GetText())
 }
 
 func (m *MenuList) GetText() string {
 	text := ""
-	style := lipgloss.NewStyle().Width(m.Width).Padding(0, 2).Foreground(colors.ColorPalette().Lavender)
+	style := lipgloss.NewStyle().Width(m.Width).Padding(0, 2).Foreground(colors.ColorPalette().Text)
 
 	for idx, val := range m.Selections {
 		line := m.Options[val]
 		if m.Selected == idx {
-			text += style.Background(colors.ColorPalette().Lavender).
-				Foreground(colors.ColorPalette().Base).
+			text += style.Background(colors.ColorPalette().MenuSelectedBg).
+				Foreground(colors.ColorPalette().MenuSelectedText).
 				Render(line) + "\n"
 
 			continue

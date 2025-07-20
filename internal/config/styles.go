@@ -1,13 +1,15 @@
 package config
 
 type StylesConfig struct {
-	Text          string           `mapstructure:"text"`
-	Background    string           `mapstructure:"background"`
-	Border        string           `mapstructure:"border"`
-	FocusedBorder string           `mapstructure:"focused_border"`
-	Icons         IconsConfig      `mapstructure:"icons"`
-	Renderer      RendererConfig   `mapstructure:"renderer"`
-	TaskStyles    TaskStylesConfig `mapstructure:"task_styles"`
+	Text             string           `mapstructure:"text"`
+	Background       string           `mapstructure:"background"`
+	Border           string           `mapstructure:"border"`
+	FocusedBorder    string           `mapstructure:"focused_border"`
+	MenuSelectedBg   string           `mapstructure:"menu_selected_bg"`
+	MenuSelectedText string           `mapstructure:"menu_selected_text"`
+	Icons            IconsConfig      `mapstructure:"icons"`
+	Renderer         RendererConfig   `mapstructure:"renderer"`
+	TaskStyles       TaskStylesConfig `mapstructure:"task_styles"`
 }
 
 type IconsConfig struct {

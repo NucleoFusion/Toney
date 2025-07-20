@@ -129,7 +129,7 @@ func (m *Daily) View() string {
 		main = lipgloss.JoinVertical(lipgloss.Left,
 			styles.GetDailyText(m.Width, m.Height/3),
 			lipgloss.Place(m.Width, 2*m.Height/3, lipgloss.Center, lipgloss.Top,
-				lipgloss.NewStyle().Foreground(colors.ColorPalette().Lavender).Render("You have no Tasks!")))
+				lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Render("You have no Tasks!")))
 	}
 
 	help := lipgloss.NewStyle().PaddingLeft(2).Render(m.Help.View(keymap.NewDynamic(m.Keymap.Bindings())))

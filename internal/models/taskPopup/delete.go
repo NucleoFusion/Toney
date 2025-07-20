@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -30,12 +31,12 @@ func (m *DeleteForm) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "down":
+		case config.AppConfig.Keybinds.Global.Down:
 			if m.isDeleting {
 				m.isDeleting = !m.isDeleting
 			}
 			return m, nil
-		case "up":
+		case config.AppConfig.Keybinds.Global.Up:
 			if !m.isDeleting {
 				m.isDeleting = !m.isDeleting
 			}
@@ -47,22 +48,24 @@ func (m *DeleteForm) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m *DeleteForm) View() string {
-	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Surface1).Render(m.GetText())
+	return lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().Border).Render(m.GetText())
 }
 
 func (m DeleteForm) GetText() string {
 	yes := "Yes"
 	no := "No"
-	style := lipgloss.NewStyle().Width(m.Width).Foreground(colors.ColorPalette().Lavender)
+	style := lipgloss.NewStyle().Width(m.Width).Foreground(colors.ColorPalette().Text)
 
 	if m.isDeleting {
-		yes = style.Background(colors.ColorPalette().Lavender).
-			Foreground(colors.ColorPalette().Base).
+		yes = style.Background(colors.ColorPalette().MenuSelectedBg).
+			Foreground(colors.ColorPalette().MenuSelectedText).
 			Render(yes)
+		no = style.Render(no)
 	} else {
-		no = style.Background(colors.ColorPalette().Lavender).
-			Foreground(colors.ColorPalette().Base).
+		no = style.Background(colors.ColorPalette().MenuSelectedBg).
+			Foreground(colors.ColorPalette().MenuSelectedText).
 			Render(no)
+		yes = style.Render(yes)
 	}
 
 	return fmt.Sprintf("%s\n%s", yes, no)

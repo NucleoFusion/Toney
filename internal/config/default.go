@@ -38,13 +38,15 @@ func DefaultConfig() Config {
 			},
 		},
 		Styles: StylesConfig{
-			Text:          "#cdd6f4",
-			Background:    "#1e1e2e",
-			Border:        "#45475a",
-			FocusedBorder: "#b4befe",
-			Icons: IconsConfig{
-				FolderIcon: "📁",
-				FileIcon:   "📄",
+			Text:             "#cdd6f4",
+			Background:       "#1e1e2e",
+			Border:           "#45475a",
+			FocusedBorder:    "#b4befe",
+			MenuSelectedBg:   "#b4befe",
+			MenuSelectedText: "#1e1e2e",
+			Icons: IconsConfig{ // TODO: Replacement
+				FolderIcon: "󰷏",
+				FileIcon:   "",
 				TaskIcons: TaskIcons{
 					CompletedIcon: "✓",
 					AbandonedIcon: "×",
