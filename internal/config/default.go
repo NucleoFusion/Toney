@@ -44,7 +44,7 @@ func DefaultConfig() Config {
 			FocusedBorder:    "#b4befe",
 			MenuSelectedBg:   "#b4befe",
 			MenuSelectedText: "#1e1e2e",
-			Icons: IconsConfig{ // TODO: Replacement
+			Icons: IconsConfig{
 				FolderIcon: "󰷏",
 				FileIcon:   "",
 				TaskIcons: TaskIcons{
