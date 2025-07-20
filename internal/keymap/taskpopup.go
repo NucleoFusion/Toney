@@ -3,6 +3,7 @@ package keymap
 import (
 	"reflect"
 
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/charmbracelet/bubbles/key"
 )
 
@@ -12,14 +13,15 @@ type TaskPopupMap struct {
 }
 
 func NewTaskPopupMap() TaskPopupMap {
+	cfg := config.AppConfig.Keybinds.Daily
 	return TaskPopupMap{
 		Enter: key.NewBinding(
-			key.WithKeys("enter"),
-			key.WithHelp("enter", "Enter"),
+			key.WithKeys(cfg.Enter),
+			key.WithHelp(cfg.Enter, "Enter"),
 		),
 		Exit: key.NewBinding(
-			key.WithKeys("esc"),
-			key.WithHelp("esc", "Exit"),
+			key.WithKeys(cfg.ExitPopup),
+			key.WithHelp(cfg.ExitPopup, "Exit"),
 		),
 	}
 }
@@ -44,14 +46,15 @@ type TaskFormMap struct {
 }
 
 func NewTaskFormMap() TaskFormMap {
+	cfg := config.AppConfig.Keybinds.Daily
 	return TaskFormMap{
 		MoveUp: key.NewBinding(
-			key.WithKeys("ctrl+up"),
-			key.WithHelp("ctrl+up", "Move Up"),
+			key.WithKeys(cfg.FormUp),
+			key.WithHelp(cfg.FormUp, "Move Up"),
 		),
 		MoveDown: key.NewBinding(
-			key.WithKeys("ctrl+down"),
-			key.WithHelp("ctrl+down", "Move Down"),
+			key.WithKeys(cfg.FormDown),
+			key.WithHelp(cfg.FormDown, "Move Down"),
 		),
 	}
 }

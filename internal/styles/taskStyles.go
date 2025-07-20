@@ -10,22 +10,30 @@ type TaskStyle struct {
 	Desc  lipgloss.Style
 }
 
-var CompletedStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Green),
-	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().GreenDull),
+func CompletedStyle() TaskStyle {
+	return TaskStyle{
+		Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().CompletedTask.TaskTitle),
+		Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().CompletedTask.TaskDesc),
+	}
 }
 
-var StartedStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Yellow),
-	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().YellowDull),
+func StartedStyle() TaskStyle {
+	return TaskStyle{
+		Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().StartedTask.TaskTitle),
+		Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().StartedTask.TaskDesc),
+	}
 }
 
-var AbandonedStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Red),
-	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().RedDull),
+func AbandonedStyle() TaskStyle {
+	return TaskStyle{
+		Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().AbandonedTask.TaskTitle),
+		Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().AbandonedTask.TaskDesc),
+	}
 }
 
-var PendingStyle = TaskStyle{
-	Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().Overlay0),
-	Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().Surface0),
+func PendingStyle() TaskStyle {
+	return TaskStyle{
+		Title: lipgloss.NewStyle().Foreground(colors.ColorPalette().PendingTask.TaskTitle),
+		Desc:  lipgloss.NewStyle().Foreground(colors.ColorPalette().PendingTask.TaskDesc),
+	}
 }

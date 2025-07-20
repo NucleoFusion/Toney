@@ -5,4 +5,4 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var CurrentNodeStyle = lipgloss.NewStyle().Background(colors.ColorPalette().Lavender).Foreground(colors.ColorPalette().Base)
+var CurrentNodeStyle = lipgloss.NewStyle().Background(colors.ColorPalette().MenuSelectedBg).Foreground(colors.ColorPalette().MenuSelectedText)

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	filetree "github.com/SourcewareLab/Toney/internal/fileTree"
 	"github.com/SourcewareLab/Toney/internal/keymap"
@@ -85,7 +86,7 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 
-			c := exec.Command("nvim", strings.TrimSuffix(filepopup.GetPath(m.CurrentNode), "/"))
+			c := exec.Command(config.AppConfig.General.Editor, strings.TrimSuffix(filepopup.GetPath(m.CurrentNode), "/"))
 			cmd := tea.ExecProcess(c, func(err error) tea.Msg {
 				return messages.EditorClose{
 					Err: err,
@@ -129,11 +130,11 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m FileExplorer) View() string {
-	style := styles.BorderStyle
+	style := styles.BorderStyle()
 	style = style.Align(lipgloss.Left, lipgloss.Top)
 
 	if m.IsFocused {
-		style = style.BorderForeground(colors.ColorPalette().Lavender)
+		style = style.BorderForeground(colors.ColorPalette().FocusedBorder)
 	}
 
 	w := (m.Width / 4) - 1

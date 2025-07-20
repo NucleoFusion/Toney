@@ -5,13 +5,15 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/charmbracelet/lipgloss"
 )
 
 func CreateTree() (*Node, error) {
 	home, _ := os.UserHomeDir()
 
-	root, err := buildTree(nil, filepath.Join(home, ".toney"), 0)
+	root, err := buildTree(nil, filepath.Join(home, config.AppConfig.General.NotesDir), 0)
 	if err != nil {
 		return nil, err
 	}
@@ -55,9 +57,9 @@ func BuildNodeTree(n *Node, prefix string, isLast bool, curr *Node) string {
 		branch = "└─ "
 	}
 
-	icon := "📄"
+	icon := config.AppConfig.Styles.Icons.FileIcon
 	if n.IsDirectory {
-		icon = "📁"
+		icon = config.AppConfig.Styles.Icons.FolderIcon
 	}
 
 	newPrefix := prefix
@@ -70,9 +72,11 @@ func BuildNodeTree(n *Node, prefix string, isLast bool, curr *Node) string {
 		line = prefix + branch + icon + " " + n.Name
 	}
 
-	// Style current node
 	if n == curr {
-		line = styles.CurrentNodeStyle.Render(line)
+		line = lipgloss.NewStyle().Background(colors.ColorPalette().MenuSelectedBg).
+			Foreground(colors.ColorPalette().MenuSelectedText).Render(line)
+	} else {
+		line = lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Render(line)
 	}
 
 	sb.WriteString(line + "\n")
