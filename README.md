@@ -84,16 +84,16 @@ Once the File Tree is focused (`F` or `Shift + F`):
 
 ### v2.0.0 Goals
 
-- [ ] Daily Tasks 
-- [ ] Journals
-- [ ] Config File
-  - [ ] Custom Styles
-  - [ ] Custom Editor
-  - [ ] Custom Notes Directory
-  - [ ] Custom Keybinds
+- [X] Daily Tasks 
+- [ ] Diary
+- [X] Config File
+  - [X] Custom Styles
+  - [X] Custom Editor
+  - [X] Custom Notes Directory
+  - [X] Custom Keybinds
 - [ ] Search In Notes
 - [ ] Search for Notes  
-- [ ] Keybind Helper (using Bubbles)
+- [X] Keybind Helper (using Bubbles)
 
 ### Short Term Goals
 
