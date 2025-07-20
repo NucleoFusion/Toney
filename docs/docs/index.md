@@ -11,7 +11,7 @@ hero:
       link: /docs
     - theme: alt
       text: Documentation 
-      link: /guide/resources
+      link: /config/
 
 features:
   - title: Terminal-First Note Taking! 
