@@ -16,6 +16,7 @@ import (
 	"github.com/SourcewareLab/Toney/internal/styles"
 
 	"github.com/charmbracelet/bubbles/key"
+	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -25,6 +26,7 @@ type FileExplorer struct {
 	IsFocused     bool
 	Width         int
 	Height        int
+	Vp            viewport.Model
 	Root          *filetree.Node
 	CurrentNode   *filetree.Node
 	CurrentIndex  int
@@ -43,6 +45,7 @@ func NewFileExplorer(w int, h int) *FileExplorer {
 	return &FileExplorer{
 		Width:        w,
 		Height:       h,
+		Vp:           viewport.New(w/4-1, h),
 		Root:         root,
 		CurrentNode:  root,
 		CurrentIndex: 0,
@@ -71,6 +74,12 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.CurrentIndex += 1
 			m.CurrentNode = m.VisibleNodes[m.CurrentIndex]
+
+			// fmt.Println(m.CurrentIndex*5, m.Vp.YOffset+m.Vp.Height-5)
+			if m.CurrentIndex > m.Vp.YOffset+m.Vp.Height-5 {
+				m.Vp.YOffset += 1
+			}
+
 			return m, m.SelectionChanged(m.CurrentNode)
 		case key.Matches(msg, m.Keymap.Up):
 			if m.CurrentIndex <= 0 {
@@ -78,6 +87,11 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			m.CurrentIndex -= 1
 			m.CurrentNode = m.VisibleNodes[m.CurrentIndex]
+
+			if m.CurrentIndex < m.Vp.YOffset {
+				m.Vp.YOffset -= 1
+			}
+
 			return m, m.SelectionChanged(m.CurrentNode)
 		case key.Matches(msg, m.Keymap.OpenForEdit):
 			if m.CurrentNode.IsDirectory {
@@ -122,6 +136,10 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					Curr: m.CurrentNode,
 				}
 			}
+		default:
+			var cmd tea.Cmd
+			m.Vp, cmd = m.Vp.Update(msg)
+			return m, cmd
 
 		}
 	}
@@ -131,18 +149,18 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m FileExplorer) View() string {
 	style := styles.BorderStyle()
-	style = style.Align(lipgloss.Left, lipgloss.Top)
+	style = style.Align(lipgloss.Left, lipgloss.Top).MarginTop(1)
 
 	if m.IsFocused {
 		style = style.BorderForeground(colors.ColorPalette().FocusedBorder)
 	}
 
-	w := (m.Width / 4) - 1
-	h := m.Height - 3
-
 	s := filetree.BuildNodeTree(m.Root, "", len(m.Root.Children) == 0, m.CurrentNode)
 
-	return style.Width(w).Height(h).MarginTop(1).Render(s)
+	m.Vp.SetContent(s)
+	m.Vp.Style = style
+
+	return m.Vp.View()
 }
 
 func (m *FileExplorer) Resize(w int, h int) {
