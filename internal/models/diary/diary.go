@@ -11,6 +11,7 @@ import (
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/SourcewareLab/Toney/internal/models/fzf"
 	"github.com/SourcewareLab/Toney/internal/styles"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
@@ -26,9 +27,11 @@ type Diary struct {
 	Keymap       keymap.DiaryMap
 	DirPath      string
 	CurrFileName string
+	ShowFinder   bool
 	CurrDate     time.Time
 	Vp           viewport.Model
 	Help         help.Model
+	Finder       fzf.FuzzyFinder
 	Renderer     *glamour.TermRenderer
 }
 
@@ -52,6 +55,7 @@ func NewDiary(w int, h int) *Diary {
 		Keymap:       keymap.NewDiaryMap(),
 		Vp:           vp,
 		Help:         help.New(),
+		Finder:       fzf.NewFzf([]string{"a", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c"}, w, h),
 		CurrFileName: today,
 		DirPath:      dirpath,
 		Renderer:     r,
@@ -68,6 +72,10 @@ func (m *Diary) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.Refresh()
 		return m, nil
 	case tea.KeyMsg:
+		if m.ShowFinder {
+			m.Finder.Update(msg)
+			return m, nil
+		}
 		switch {
 		case key.Matches(msg, m.Keymap.Edit):
 			home, _ := os.UserHomeDir()
@@ -79,6 +87,9 @@ func (m *Diary) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			})
 
 			return m, cmd
+		case key.Matches(msg, m.Keymap.OpenFinder):
+			m.ShowFinder = true
+			return m, nil
 		default:
 			var cmd tea.Cmd
 			m.Vp, cmd = m.Vp.Update(msg)
@@ -86,11 +97,19 @@ func (m *Diary) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 	var cmd tea.Cmd
-	m.Vp, cmd = m.Vp.Update(msg)
+	if m.ShowFinder {
+		m.Finder, cmd = m.Finder.Update(msg)
+	} else {
+		m.Vp, cmd = m.Vp.Update(msg)
+	}
 	return m, cmd
 }
 
 func (m *Diary) View() string {
+	if m.ShowFinder {
+		return m.Finder.View()
+	}
+
 	return lipgloss.JoinVertical(lipgloss.Left, m.Vp.View(),
 		lipgloss.NewStyle().PaddingLeft(2).Render(m.Help.View(keymap.NewDynamic(m.Keymap.Bindings()))))
 }

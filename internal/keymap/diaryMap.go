@@ -10,6 +10,7 @@ type DiaryMap struct {
 	Edit       key.Binding
 	ScrollUp   key.Binding
 	ScrollDown key.Binding
+	OpenFinder key.Binding
 }
 
 func NewDiaryMap() DiaryMap {
@@ -17,6 +18,10 @@ func NewDiaryMap() DiaryMap {
 		Edit: key.NewBinding(
 			key.WithKeys("e"),
 			key.WithHelp("e", "edit"),
+		),
+		OpenFinder: key.NewBinding(
+			key.WithKeys("f"),
+			key.WithHelp("f", "find"),
 		),
 		ScrollUp: key.NewBinding(
 			key.WithKeys("up"),
