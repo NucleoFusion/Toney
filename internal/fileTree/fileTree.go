@@ -72,6 +72,8 @@ func BuildNodeTree(n *Node, prefix string, isLast bool, curr *Node) string {
 		line = prefix + branch + icon + " " + n.Name
 	}
 
+	// line += "\n\n\n\n"
+
 	if n == curr {
 		line = lipgloss.NewStyle().Background(colors.ColorPalette().MenuSelectedBg).
 			Foreground(colors.ColorPalette().MenuSelectedText).Render(line)
