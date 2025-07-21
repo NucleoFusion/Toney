@@ -1,11 +1,16 @@
 package fzf
 
 import (
+	"fmt"
+	"sort"
+
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/lithammer/fuzzysearch/fuzzy"
 )
 
 type FuzzyFinder struct {
@@ -38,6 +43,9 @@ func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
+		case "/":
+			m.Ti.Placeholder = "Search for Diary Entries..."
+			m.Ti.Focus()
 		case "down":
 			if len(m.Filtered)-1 > m.SelectedIndex {
 				m.SelectedIndex += 1
@@ -56,6 +64,22 @@ func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 			}
 			m.UpdateVP()
 			return *m, nil
+		case "enter":
+			fmt.Println("entered")
+			return *m, func() tea.Msg {
+				fmt.Println("CALLED IT")
+				return messages.FzfSelection{
+					Selection: m.Filtered[m.SelectedIndex],
+				}
+			}
+		default:
+			if m.Ti.Focused() {
+				var cmd tea.Cmd
+				m.Ti, cmd = m.Ti.Update(msg)
+				m.Filter(m.Ti.Value())
+				m.UpdateVP()
+				return *m, cmd
+			}
 		}
 	}
 
@@ -81,4 +105,19 @@ func (m *FuzzyFinder) UpdateVP() {
 	}
 
 	m.Vp.SetContent(text)
+}
+
+func (m *FuzzyFinder) Filter(val string) {
+	ranked := fuzzy.RankFindFold(val, m.Items)
+	sort.Sort(ranked) // Sort by ascending distance
+	result := make([]string, len(ranked))
+	for i, r := range ranked {
+		result[i] = r.Target
+	}
+
+	m.Filtered = result
+
+	if len(m.Filtered) <= m.SelectedIndex { // So that index doesnt go out of bounds
+		m.SelectedIndex = len(m.Filtered) - 1
+	}
 }

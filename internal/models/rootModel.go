@@ -45,6 +45,33 @@ func (m RootModel) Init() tea.Cmd {
 
 func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case messages.FzfSelection:
+		switch m.CurrentPage {
+		case enums.MenuPage:
+			pg, cmd := m.Menu.Update(msg)
+			if d, ok := pg.(*menu.Menu); ok { // Type matching, cause I cant assign it straightaway
+				m.Menu = d
+				return m, cmd
+			}
+		case enums.HomePage:
+			pg, cmd := m.Home.Update(msg)
+			if d, ok := pg.(*homemodel.HomeModel); ok { // Type matching, cause I cant assign it straightaway
+				m.Home = d
+				return m, cmd
+			}
+		case enums.DailyPage:
+			pg, cmd := m.Daily.Update(msg)
+			if d, ok := pg.(*daily.Daily); ok { // Type matching, cause I cant assign it straightaway
+				m.Daily = d
+				return m, cmd
+			}
+		case enums.DiaryPage:
+			pg, cmd := m.Diary.Update(msg)
+			if d, ok := pg.(*diary.Diary); ok { // Type matching, cause I cant assign it straightaway
+				m.Diary = d
+				return m, cmd
+			}
+		}
 	case messages.TaskPopupMessage:
 		if m.CurrentPage == enums.DailyPage {
 			dailypage, cmd := m.Daily.Update(msg)

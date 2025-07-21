@@ -49,13 +49,15 @@ func NewDiary(w int, h int) *Diary {
 		Foreground(colors.ColorPalette().Text)
 	vp.SetContent(content)
 
+	files, _ := AllFiles(dirpath)
+
 	return &Diary{
 		Width:        w,
 		Height:       h,
 		Keymap:       keymap.NewDiaryMap(),
 		Vp:           vp,
 		Help:         help.New(),
-		Finder:       fzf.NewFzf([]string{"a", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c", "b", "c"}, w, h),
+		Finder:       fzf.NewFzf(files, w, h),
 		CurrFileName: today,
 		DirPath:      dirpath,
 		Renderer:     r,
@@ -68,13 +70,19 @@ func (m *Diary) Init() tea.Cmd {
 
 func (m *Diary) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case messages.FzfSelection:
+		m.CurrFileName = msg.Selection
+		m.Refresh()
+		m.ShowFinder = false
+		return m, nil
 	case messages.EditorClose:
 		m.Refresh()
 		return m, nil
 	case tea.KeyMsg:
 		if m.ShowFinder {
-			m.Finder.Update(msg)
-			return m, nil
+			var cmd tea.Cmd
+			m.Finder, cmd = m.Finder.Update(msg)
+			return m, cmd
 		}
 		switch {
 		case key.Matches(msg, m.Keymap.Edit):
@@ -145,6 +153,21 @@ func ReadDiary(dirpath string, today string) string {
 	}
 
 	return string(data)
+}
+
+func AllFiles(dir string) ([]string, error) {
+	home, _ := os.UserHomeDir()
+	entries, err := os.ReadDir(filepath.Join(home, dir, ".diary"))
+	if err != nil {
+		return nil, err
+	}
+	var names []string
+	for _, e := range entries {
+		if !e.IsDir() {
+			names = append(names, e.Name())
+		}
+	}
+	return names, nil
 }
 
 func getOrdinalSuffix(day int) string {

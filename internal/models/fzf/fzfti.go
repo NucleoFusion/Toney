@@ -15,6 +15,7 @@ func NewTI(w int) textinput.Model {
 	ti.Placeholder = "Press '/' To Search..."
 	ti.Prompt = "Filter : "
 	ti.Width = w - 12
+	ti.TextStyle = TextStyle()
 	ti.PromptStyle = TextStyle()
 
 	return ti

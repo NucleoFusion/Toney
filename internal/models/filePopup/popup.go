@@ -14,10 +14,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-var (
-	popupStyle  = styles.BorderStyle().Align(lipgloss.Left, lipgloss.Top).BorderForeground(colors.ColorPalette().Border)
-	headerStyle = lipgloss.NewStyle().Background(colors.ColorPalette().Background).Foreground(colors.ColorPalette().Text)
-)
+func PopupStyle() lipgloss.Style {
+	return styles.BorderStyle().Align(lipgloss.Left, lipgloss.Top).BorderForeground(colors.ColorPalette().FocusedBorder)
+}
+
+func HeaderStyle() lipgloss.Style {
+	return lipgloss.NewStyle().Background(colors.ColorPalette().MenuSelectedBg).Foreground(colors.ColorPalette().MenuSelectedText)
+}
 
 type FilePopup struct {
 	Height    int
@@ -29,6 +32,8 @@ type FilePopup struct {
 
 func NewPopup(typ enums.PopupType, node *filetree.Node) *FilePopup {
 	ti := textinput.New()
+	ti.TextStyle = lipgloss.NewStyle().Foreground(colors.ColorPalette().Text)
+	ti.PromptStyle = lipgloss.NewStyle().Foreground(colors.ColorPalette().Text)
 	ti.Focus()
 
 	return &FilePopup{
@@ -72,7 +77,7 @@ func (m *FilePopup) View() string {
 	w := m.Width / 3
 	h := m.Height / 3
 
-	return popupStyle.Width(w).Height(h).Render(GetText(m.Type, m.TextInput))
+	return PopupStyle().Width(w).Height(h).Render(GetText(m.Type, m.TextInput))
 }
 
 func GetText(typ enums.PopupType, ti textinput.Model) string {
@@ -90,5 +95,5 @@ func GetText(typ enums.PopupType, ti textinput.Model) string {
 		header = "TBD"
 	}
 
-	return fmt.Sprintf("%s\n\n%s", headerStyle.Render(header), ti.View())
+	return fmt.Sprintf("%s\n\n%s", HeaderStyle().Render(header), ti.View())
 }
