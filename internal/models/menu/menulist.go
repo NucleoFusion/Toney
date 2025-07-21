@@ -20,7 +20,7 @@ type MenuList struct {
 }
 
 func NewMenuList(w int, h int, opts map[enums.Page]string) *MenuList {
-	selections := []enums.Page{enums.HomePage, enums.DailyPage, enums.JournalPage, enums.Quit}
+	selections := []enums.Page{enums.HomePage, enums.DailyPage, enums.DiaryPage, enums.Quit}
 
 	return &MenuList{
 		Width:      w,

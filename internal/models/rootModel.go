@@ -6,6 +6,7 @@ import (
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/SourcewareLab/Toney/internal/models/daily"
+	"github.com/SourcewareLab/Toney/internal/models/diary"
 	filepopup "github.com/SourcewareLab/Toney/internal/models/filePopup"
 	homemodel "github.com/SourcewareLab/Toney/internal/models/homeModel"
 	"github.com/SourcewareLab/Toney/internal/models/menu"
@@ -22,6 +23,7 @@ type RootModel struct {
 	Home          *homemodel.HomeModel
 	Menu          *menu.Menu
 	Daily         *daily.Daily
+	Diary         *diary.Diary
 	CurrentPage   enums.Page
 	ShowPopup     bool
 	FilePopupType enums.PopupType
@@ -60,8 +62,8 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.CurrentPage = enums.HomePage
 		case enums.DailyPage:
 			m.CurrentPage = enums.DailyPage
-		case enums.JournalPage:
-			m.CurrentPage = enums.JournalPage
+		case enums.DiaryPage:
+			m.CurrentPage = enums.DiaryPage
 		case enums.Quit:
 			return m, tea.Quit
 		}
@@ -80,6 +82,10 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.Home.FileExplorer.Update(msg)
 		return m, nil
 	case messages.EditorClose:
+		if m.CurrentPage == enums.DiaryPage {
+			m.Diary.Update(msg)
+			return m, nil
+		}
 		if msg.Err != nil {
 			fmt.Println(msg.Err.Error())
 		}
@@ -101,10 +107,13 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.Home != nil { // Checking whether this is an app resize or app open
 			m.Menu.Update(msg)
 			m.Home.Update(msg)
+			m.Diary.Update(msg)
+			m.Daily.Update(msg)
 		} else {
 			m.Home = homemodel.NewHome(msg.Width, msg.Height)
 			m.Menu = menu.NewMenu(msg.Width, msg.Height)
 			m.Daily = daily.NewDaily(msg.Width, msg.Height)
+			m.Diary = diary.NewDiary(msg.Width, msg.Height)
 		}
 
 		m.isLoading = false
@@ -124,6 +133,8 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			_, cmd = m.Home.Update(msg)
 		case enums.DailyPage:
 			_, cmd = m.Daily.Update(msg)
+		case enums.DiaryPage:
+			_, cmd = m.Diary.Update(msg)
 		default:
 			fmt.Printf("UNHANDLED MSG: %#v\n", msg)
 		}
@@ -148,6 +159,8 @@ func (m *RootModel) View() string {
 		return m.Menu.View()
 	case enums.DailyPage:
 		return m.Daily.View()
+	case enums.DiaryPage:
+		return m.Diary.View()
 	default:
 		return lipgloss.NewStyle().Background(colors.ColorPalette().Background).Render(m.Home.View())
 	}

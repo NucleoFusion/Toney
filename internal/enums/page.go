@@ -6,6 +6,6 @@ const (
 	MenuPage = iota
 	HomePage
 	DailyPage
-	JournalPage
+	DiaryPage
 	Quit
 )
