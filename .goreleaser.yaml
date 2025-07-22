@@ -1,0 +1,56 @@
+project_name: toney
+release:
+  github:
+    owner: SourcewareLab 
+    name: toney
+
+builds:
+  - id: toney
+    main: . 
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+    binary: toney
+
+archives:
+  - id: archive
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+nfpms:
+  - id: deb
+    packager: deb
+    formats:
+      - deb
+    section: utils
+    priority: optional
+    maintainer: "NucleoFusion <lakshit.singh.mail@gmail.com>"
+    description: "Toney - a fast, lightweight terminal-based note-taking app"
+    license: MIT
+    vendor: NucleoFusion
+    homepage: https://sourcewarelab.github.com/Toney/
+
+  - id: rpm
+    packager: rpm
+    formats:
+      - rpm
+    section: utils
+    priority: optional
+    maintainer: "NucleoFusion <lakshit.singh.mail@gmail.com>"
+    description: "Toney - a fast, lightweight terminal-based note-taking app"
+    license: MIT
+    vendor: NucleoFusion
+    homepage: https://sourcewarelab.github.com/Toney/
+
+checksum:
+  name_template: 'checksums.txt'
+
+
