@@ -9,13 +9,13 @@
 ### Arch Linux (AUR)
 
 ```
-yay -S toney (TBD - not yet works)
+yay -S toney
 ```
 > _maintained by [NucleoFusion](https://github.com/NucleoFusion)_
 
 ### Debian / Ubuntu (.deb) 
 
-Install the .deb file [_here_](https://www.youtube.com/watch?v=xvFZjo5PgG0&list=RDxvFZjo5PgG0&start_radio=1).
+Install the .deb file [_here_](https://github.com/SourcewareLab/Toney/releases/tag/v2.0.0).
 
 ```
 sudo apt install ./path/to/debfile
@@ -24,7 +24,7 @@ sudo apt install ./path/to/debfile
 
 ### Fedora / RHEL (.dnf) 
 
-Install the .dnf file [_here_](https://www.youtube.com/watch?v=xvFZjo5PgG0&list=RDxvFZjo5PgG0&start_radio=1).
+Install the .dnf file [_here_](https://github.com/SourcewareLab/Toney/releases/tag/v2.0.0).
 
 ```
 sudo dnf install ./path/to/debfile
@@ -33,9 +33,13 @@ sudo dnf install ./path/to/debfile
 
 ## Windows
 
-Install the .exe file [_here_](https://www.youtube.com/watch?v=xvFZjo5PgG0&list=RDxvFZjo5PgG0&start_radio=1).
+Install the .zip file [_here_](https://github.com/SourcewareLab/Toney/releases/tag/v2.0.0).
 
-Just run the exe and follow the installer instructions.
+
+## MacOS 
+
+Install the .tar.gz file [_here_](https://github.com/SourcewareLab/Toney/releases/tag/v2.0.0).
+
 
 ## From Source  
 
