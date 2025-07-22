@@ -38,3 +38,11 @@ default value is:
 scroll_down = "down"
 ```
 
+## Return To Menu 
+
+can change the keybind for returning to menu using the `return_to_menu` toml key.
+
+default value is:
+```toml
+return_to_menu = "esc"
+```

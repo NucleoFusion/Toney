@@ -74,6 +74,14 @@ func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 			return *m, func() tea.Msg {
 				return messages.FzfSelection{
 					Selection: m.Filtered[m.SelectedIndex],
+					Exited:    false,
+				}
+			}
+		case key.Matches(msg, m.Keymap.Exit):
+			return *m, func() tea.Msg {
+				return messages.FzfSelection{
+					Selection: "",
+					Exited:    true,
 				}
 			}
 		default:

@@ -9,6 +9,7 @@ type HomeKeyMap struct {
 	FocusViewer   key.Binding
 	FocusExplorer key.Binding
 	BackToMenu    key.Binding
+	Finder        key.Binding
 }
 
 func NewHomeKeyMap() HomeKeyMap {
@@ -25,6 +26,10 @@ func NewHomeKeyMap() HomeKeyMap {
 		BackToMenu: key.NewBinding(
 			key.WithKeys(cfg.BackToMenu),
 			key.WithHelp(cfg.BackToMenu, "return to menu"),
+		),
+		Finder: key.NewBinding(
+			key.WithKeys("f"),
+			key.WithHelp("f", "find"),
 		),
 	}
 }

@@ -9,6 +9,7 @@ import (
 
 	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/SourcewareLab/Toney/internal/models/fzf"
@@ -71,6 +72,10 @@ func (m *Diary) Init() tea.Cmd {
 func (m *Diary) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case messages.FzfSelection:
+		if msg.Exited {
+			m.ShowFinder = false
+			return m, nil
+		}
 		m.CurrFileName = msg.Selection
 		m.Refresh()
 		m.ShowFinder = false
@@ -98,6 +103,10 @@ func (m *Diary) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, m.Keymap.OpenFinder):
 			m.ShowFinder = true
 			return m, nil
+		case key.Matches(msg, m.Keymap.BackToMenu):
+			return m, func() tea.Msg {
+				return messages.ChangePage{Page: enums.MenuPage}
+			}
 		default:
 			var cmd tea.Cmd
 			m.Vp, cmd = m.Vp.Update(msg)

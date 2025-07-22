@@ -18,12 +18,14 @@ func DefaultConfig() Config {
 				Down:         "down",
 				Enter:        "enter",
 				StartWriting: "/",
+				Exit:         "esc",
 			},
 			Diary: DiaryKeybinds{
 				ScrollUp:   "up",
 				ScrollDown: "down",
 				Edit:       "e",
 				Finder:     "f",
+				BackToMenu: "esc",
 			},
 			Home: HomeKeybinds{
 				FocusViewer:   "V",
@@ -36,6 +38,7 @@ func DefaultConfig() Config {
 				Delete:        "d",
 				Edit:          "enter",
 				BackToMenu:    "esc",
+				Finder:        "f",
 			},
 			Daily: DailyKeybinds{
 				Create:       "c",

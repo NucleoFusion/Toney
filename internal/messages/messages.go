@@ -8,6 +8,7 @@ import (
 type (
 	FzfSelection struct {
 		Selection string
+		Exited    bool
 	}
 
 	TaskPopupMessage struct {

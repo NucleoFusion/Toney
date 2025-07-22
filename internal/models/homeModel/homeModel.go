@@ -1,10 +1,16 @@
 package homemodel
 
 import (
+	"os"
+	"path/filepath"
+
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
+	filetree "github.com/SourcewareLab/Toney/internal/fileTree"
 	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	fileexplorer "github.com/SourcewareLab/Toney/internal/models/fileExplorer"
+	"github.com/SourcewareLab/Toney/internal/models/fzf"
 	viewer "github.com/SourcewareLab/Toney/internal/models/viewer"
 
 	"github.com/charmbracelet/bubbles/help"
@@ -16,20 +22,28 @@ import (
 type HomeModel struct {
 	Width        int
 	Height       int
+	ShowFinder   bool
 	FocusOn      enums.Splits
 	FileExplorer *fileexplorer.FileExplorer
 	Viewer       *viewer.Viewer
 	Keymap       keymap.HomeKeyMap
+	Finder       fzf.FuzzyFinder
 	Help         help.Model
 }
 
 func NewHome(w int, h int) *HomeModel {
+	home, _ := os.UserHomeDir()
+	path := filepath.Join(home, config.AppConfig.General.NotesDir)
+	files, _ := filetree.ListFilesRel(path)
+
 	return &HomeModel{
 		Width:        w,
 		Height:       h,
+		ShowFinder:   false,
 		FocusOn:      enums.File,
 		FileExplorer: fileexplorer.NewFileExplorer(w, h),
 		Viewer:       viewer.NewViewer(w, h),
+		Finder:       fzf.NewFzf(files, w, h),
 		Keymap:       keymap.NewHomeKeyMap(),
 		Help:         help.New(),
 	}
@@ -43,6 +57,17 @@ func (m *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case messages.RefreshView:
 		return m.Viewer.Update(msg)
+	case messages.FzfSelection:
+		if msg.Exited {
+			m.ShowFinder = false
+			return m, nil
+		}
+		updated, cmd := m.FileExplorer.Update(msg)
+		if fe, ok := updated.(*fileexplorer.FileExplorer); ok { // Type matching, cause I cant assign it straightaway
+			m.FileExplorer = fe
+			m.ShowFinder = false
+			return m, cmd
+		}
 	case messages.ShowPopupMessage:
 		return m, func() tea.Msg {
 			return msg
@@ -66,10 +91,23 @@ func (m *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.FocusOn = enums.FViewer
 			return m, nil
 		case key.Matches(msg, m.Keymap.BackToMenu):
+			if m.ShowFinder {
+				var cmd tea.Cmd
+				m.Finder, cmd = m.Finder.Update(msg)
+				return m, cmd
+			}
 			return m, func() tea.Msg {
 				return messages.ChangePage{Page: enums.MenuPage}
 			}
+		case key.Matches(msg, m.Keymap.Finder):
+			m.ShowFinder = true
+			return m, nil
 		default:
+			if m.ShowFinder {
+				var cmd tea.Cmd
+				m.Finder, cmd = m.Finder.Update(msg)
+				return m, cmd
+			}
 			switch m.FocusOn {
 			case enums.FViewer:
 				return m.Viewer.Update(msg)
@@ -83,10 +121,14 @@ func (m *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m HomeModel) View() string {
+	if m.ShowFinder {
+		return m.Finder.View()
+	}
+
 	m.FileExplorer.IsFocused = false
 	m.Viewer.IsFocused = false
 
-	bindings := []key.Binding{m.Keymap.FocusExplorer, m.Keymap.FocusViewer, m.Keymap.BackToMenu}
+	bindings := []key.Binding{m.Keymap.FocusExplorer, m.Keymap.FocusViewer, m.Keymap.BackToMenu, m.Keymap.Finder}
 
 	if m.FocusOn == enums.File {
 		m.FileExplorer.IsFocused = true

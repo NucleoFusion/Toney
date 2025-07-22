@@ -12,6 +12,7 @@ type DiaryMap struct {
 	ScrollUp   key.Binding
 	ScrollDown key.Binding
 	OpenFinder key.Binding
+	BackToMenu key.Binding
 }
 
 func NewDiaryMap() DiaryMap {
@@ -32,6 +33,10 @@ func NewDiaryMap() DiaryMap {
 		ScrollDown: key.NewBinding(
 			key.WithKeys(cfg.ScrollDown),
 			key.WithHelp(cfg.ScrollDown, "scroll down"),
+		),
+		BackToMenu: key.NewBinding(
+			key.WithKeys(cfg.BackToMenu),
+			key.WithHelp(cfg.BackToMenu, "return to menu"),
 		),
 	}
 }

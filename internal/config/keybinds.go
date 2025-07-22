@@ -4,8 +4,8 @@ type KeybindsConfig struct {
 	Global GlobalKeybinds `mapstructure:"global"`
 	Home   HomeKeybinds   `mapstructure:"home"`
 	Daily  DailyKeybinds  `mapstructure:"daily"`
-	Fuzz   FuzzyKeybinds  `mapstructure:"fuzzy"` // TODO: Add to docs
-	Diary  DiaryKeybinds  `mapstructure:"diary"` // TODO: Add to docs
+	Fuzz   FuzzyKeybinds  `mapstructure:"fuzzy"`
+	Diary  DiaryKeybinds  `mapstructure:"diary"`
 }
 
 type FuzzyKeybinds struct {
@@ -13,6 +13,7 @@ type FuzzyKeybinds struct {
 	Up           string `mapstructure:"up"`
 	Down         string `mapstructure:"down"`
 	Enter        string `mapstructure:"enter"`
+	Exit         string `mapstructure:"exit"`
 }
 
 type DiaryKeybinds struct {
@@ -20,6 +21,7 @@ type DiaryKeybinds struct {
 	ScrollUp   string `mapstructure:"scroll_up"`
 	ScrollDown string `mapstructure:"scroll_down"`
 	Finder     string `mapstructure:"finder"`
+	BackToMenu string `mapstructure:"return_to_menu"`
 }
 
 type GlobalKeybinds struct {
@@ -50,4 +52,5 @@ type HomeKeybinds struct {
 	Edit          string `mapstructure:"edit"`
 	ScrollUp      string `mapstructure:"scroll_up"`
 	ScrollDown    string `mapstructure:"scroll_down"`
+	Finder        string `mapstructure:"finder"`
 }
