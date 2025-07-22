@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -15,7 +14,19 @@ var initCmd = &cobra.Command{
 	Short: "Initialize Toney configuration",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := config.SetConfig(); err != nil {
-			log.Fatalf("failed to load config: %v", err)
+			home, _ := os.UserHomeDir()
+
+			err = os.MkdirAll(home+"/.config/toney", 0o755)
+			if err != nil {
+				fmt.Println("Could not create config directory", err.Error())
+				return
+			}
+
+			_, err = os.Create(home + "/.config/toney/config.toml")
+			if err != nil {
+				fmt.Println("Could not create config file", err.Error())
+				return
+			}
 		}
 
 		fmt.Println("Initializing Toney...")
@@ -38,18 +49,6 @@ var initCmd = &cobra.Command{
 		err = os.MkdirAll(diaryDir, 0o755)
 		if err != nil {
 			fmt.Println("Could not create .diary directory", err.Error())
-			return
-		}
-
-		err = os.MkdirAll(home+"/.config/toney", 0o755)
-		if err != nil {
-			fmt.Println("Could not create config directory", err.Error())
-			return
-		}
-
-		_, err = os.Create(home + "/.config/toney/config.toml")
-		if err != nil {
-			fmt.Println("Could not create config file", err.Error())
 			return
 		}
 

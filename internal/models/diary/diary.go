@@ -92,7 +92,11 @@ func (m *Diary) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch {
 		case key.Matches(msg, m.Keymap.Edit):
 			home, _ := os.UserHomeDir()
-			c := exec.Command(config.AppConfig.General.Editor, filepath.Join(home, m.DirPath, ".diary", m.CurrFileName))
+
+			args := config.AppConfig.General.Editor
+			args = append(args, filepath.Join(home, m.DirPath, ".diary", m.CurrFileName))
+
+			c := exec.Command(args[0], args[1:]...)
 			cmd := tea.ExecProcess(c, func(err error) tea.Msg {
 				return messages.EditorClose{
 					Err: err,
