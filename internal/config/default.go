@@ -5,7 +5,7 @@ import "github.com/charmbracelet/lipgloss"
 func DefaultConfig() Config {
 	return Config{
 		General: GeneralConfig{
-			Editor:   "nvim",
+			Editor:   []string{"nvim"},
 			NotesDir: ".toney", // From $HOME Directory
 		},
 		Keybinds: KeybindsConfig{

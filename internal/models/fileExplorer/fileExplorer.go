@@ -105,7 +105,10 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, nil
 			}
 
-			c := exec.Command(config.AppConfig.General.Editor, strings.TrimSuffix(filepopup.GetPath(m.CurrentNode), "/"))
+			args := config.AppConfig.General.Editor
+			args = append(args, strings.TrimSuffix(filepopup.GetPath(m.CurrentNode), "/"))
+
+			c := exec.Command(args[0], args[1:]...)
 			cmd := tea.ExecProcess(c, func(err error) tea.Msg {
 				return messages.EditorClose{
 					Err: err,
