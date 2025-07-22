@@ -56,7 +56,7 @@ func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 			if len(m.Filtered)-1 > m.SelectedIndex {
 				m.SelectedIndex += 1
 			}
-			if m.SelectedIndex > m.Vp.Height+m.Vp.YOffset-1 {
+			if m.SelectedIndex > m.Vp.Height+m.Vp.YOffset-3 { // -2 for border and something else, idk breaks otherwise
 				m.Vp.YOffset += 1
 			}
 			m.UpdateVP()
