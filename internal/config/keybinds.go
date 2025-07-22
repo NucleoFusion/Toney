@@ -4,6 +4,22 @@ type KeybindsConfig struct {
 	Global GlobalKeybinds `mapstructure:"global"`
 	Home   HomeKeybinds   `mapstructure:"home"`
 	Daily  DailyKeybinds  `mapstructure:"daily"`
+	Fuzz   FuzzyKeybinds  `mapstructure:"fuzzy"` // TODO: Add to docs
+	Diary  DiaryKeybinds  `mapstructure:"diary"` // TODO: Add to docs
+}
+
+type FuzzyKeybinds struct {
+	StartWriting string `mapstructure:"start_writing"`
+	Up           string `mapstructure:"up"`
+	Down         string `mapstructure:"down"`
+	Enter        string `mapstructure:"enter"`
+}
+
+type DiaryKeybinds struct {
+	Edit       string `mapstructure:"edit"`
+	ScrollUp   string `mapstructure:"scroll_up"`
+	ScrollDown string `mapstructure:"scroll_down"`
+	Finder     string `mapstructure:"finder"`
 }
 
 type GlobalKeybinds struct {

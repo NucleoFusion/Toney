@@ -6,6 +6,10 @@ import (
 )
 
 type (
+	FzfSelection struct {
+		Selection string
+	}
+
 	TaskPopupMessage struct {
 		Type      enums.TaskPopup
 		IsDeleted bool

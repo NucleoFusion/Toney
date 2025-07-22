@@ -13,6 +13,18 @@ func DefaultConfig() Config {
 				Up:   "up",
 				Down: "down",
 			},
+			Fuzz: FuzzyKeybinds{
+				Up:           "up",
+				Down:         "down",
+				Enter:        "enter",
+				StartWriting: "/",
+			},
+			Diary: DiaryKeybinds{
+				ScrollUp:   "up",
+				ScrollDown: "down",
+				Edit:       "e",
+				Finder:     "f",
+			},
 			Home: HomeKeybinds{
 				FocusViewer:   "V",
 				FocusExplorer: "F",

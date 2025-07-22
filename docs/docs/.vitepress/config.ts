@@ -8,7 +8,7 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'theme-color', content: '#0f172a' }]
   ],
-  appearance: false,
+  appearance: 'force-dark',
   base: '/Toney/',
   themeConfig: {
     outline: 'deep',
@@ -48,6 +48,8 @@ export default defineConfig({
             { text: 'Global', link: '/config/keybinds/global' },
             { text: 'Home', link: '/config/keybinds/home' },
             { text: 'Daily', link: '/config/keybinds/daily' },
+            { text: 'Diary', link: '/config/keybinds/diary' },
+            { text: 'Fuzzy Finder', link: '/config/keybinds/fuzz' },
           ]
         }
       ]

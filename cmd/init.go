@@ -33,6 +33,14 @@ var initCmd = &cobra.Command{
 			return
 		}
 
+		diaryDir := filepath.Join(home, config.AppConfig.General.NotesDir, ".diary")
+
+		err = os.MkdirAll(diaryDir, 0o755)
+		if err != nil {
+			fmt.Println("Could not create .diary directory", err.Error())
+			return
+		}
+
 		err = os.MkdirAll(home+"/.config/toney", 0o755)
 		if err != nil {
 			fmt.Println("Could not create config directory", err.Error())
