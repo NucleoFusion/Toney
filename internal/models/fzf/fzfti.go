@@ -1,7 +1,10 @@
 package fzf
 
 import (
+	"fmt"
+
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -12,7 +15,7 @@ func TextStyle() lipgloss.Style {
 
 func NewTI(w int) textinput.Model {
 	ti := textinput.New()
-	ti.Placeholder = "Press '/' To Search..."
+	ti.Placeholder = fmt.Sprintf("Press '%s' To Search...", config.AppConfig.Keybinds.Fuzz.StartWriting)
 	ti.Prompt = "Filter : "
 	ti.Width = w - 12
 	ti.TextStyle = TextStyle()

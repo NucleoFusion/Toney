@@ -3,6 +3,7 @@ package keymap
 import (
 	"reflect"
 
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/charmbracelet/bubbles/key"
 )
 
@@ -14,22 +15,23 @@ type DiaryMap struct {
 }
 
 func NewDiaryMap() DiaryMap {
+	cfg := config.AppConfig.Keybinds.Diary
 	return DiaryMap{
 		Edit: key.NewBinding(
-			key.WithKeys("e"),
-			key.WithHelp("e", "edit"),
+			key.WithKeys(cfg.Edit),
+			key.WithHelp(cfg.Edit, "edit"),
 		),
 		OpenFinder: key.NewBinding(
-			key.WithKeys("f"),
-			key.WithHelp("f", "find"),
+			key.WithKeys(cfg.Finder),
+			key.WithHelp(cfg.Finder, "find"),
 		),
 		ScrollUp: key.NewBinding(
-			key.WithKeys("up"),
-			key.WithHelp("up", "scroll up"),
+			key.WithKeys(cfg.ScrollUp),
+			key.WithHelp(cfg.ScrollUp, "scroll up"),
 		),
 		ScrollDown: key.NewBinding(
-			key.WithKeys("down"),
-			key.WithHelp("down", "scroll down"),
+			key.WithKeys(cfg.ScrollDown),
+			key.WithHelp(cfg.ScrollDown, "scroll down"),
 		),
 	}
 }

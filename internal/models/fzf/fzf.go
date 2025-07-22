@@ -1,11 +1,13 @@
 package fzf
 
 import (
-	"fmt"
 	"sort"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
@@ -16,6 +18,8 @@ import (
 type FuzzyFinder struct {
 	Width         int
 	Height        int
+	Keymap        keymap.FuzzyMap
+	Help          help.Model
 	Vp            viewport.Model
 	Ti            textinput.Model
 	Items         []string
@@ -27,6 +31,8 @@ func NewFzf(items []string, w int, h int) FuzzyFinder {
 	return FuzzyFinder{
 		Width:         w,
 		Height:        h,
+		Help:          help.New(),
+		Keymap:        keymap.NewFuzzyMap(),
 		Items:         items,
 		Filtered:      items,
 		Vp:            NewVP(w, h, items),
@@ -42,11 +48,11 @@ func (m *FuzzyFinder) Init() tea.Cmd {
 func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
-		switch msg.String() {
-		case "/":
+		switch {
+		case key.Matches(msg, m.Keymap.StartWriting):
 			m.Ti.Placeholder = "Search for Diary Entries..."
 			m.Ti.Focus()
-		case "down":
+		case key.Matches(msg, m.Keymap.Down):
 			if len(m.Filtered)-1 > m.SelectedIndex {
 				m.SelectedIndex += 1
 			}
@@ -55,7 +61,7 @@ func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 			}
 			m.UpdateVP()
 			return *m, nil
-		case "up":
+		case key.Matches(msg, m.Keymap.Up):
 			if 0 < m.SelectedIndex {
 				m.SelectedIndex -= 1
 			}
@@ -64,10 +70,8 @@ func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 			}
 			m.UpdateVP()
 			return *m, nil
-		case "enter":
-			fmt.Println("entered")
+		case key.Matches(msg, m.Keymap.Enter):
 			return *m, func() tea.Msg {
-				fmt.Println("CALLED IT")
 				return messages.FzfSelection{
 					Selection: m.Filtered[m.SelectedIndex],
 				}
@@ -87,10 +91,12 @@ func (m *FuzzyFinder) Update(msg tea.Msg) (FuzzyFinder, tea.Cmd) {
 }
 
 func (m *FuzzyFinder) View() string {
-	return lipgloss.Place(m.Width, m.Height, lipgloss.Center, lipgloss.Center,
+	pg := lipgloss.Place(m.Width, m.Height-1, lipgloss.Center, lipgloss.Center,
 		lipgloss.JoinVertical(lipgloss.Center,
 			lipgloss.NewStyle().Border(lipgloss.RoundedBorder()).BorderForeground(colors.ColorPalette().FocusedBorder).Render(m.Ti.View()),
 			m.Vp.View()))
+	hlp := lipgloss.NewStyle().PaddingLeft(2).Render(m.Help.View(keymap.NewDynamic(m.Keymap.Bindings())))
+	return lipgloss.JoinVertical(lipgloss.Left, pg, hlp)
 }
 
 func (m *FuzzyFinder) UpdateVP() {
