@@ -21,6 +21,15 @@ Default value:
 focus_explorer = "F"
 ```
 
+## Finder
+
+You can change the keybind for opening the fuzzy finder using the `finder` TOML key.
+
+Default value:
+```toml
+finder = "f"
+```
+
 ## Create File/Folder
 
 You can change the keybind for creating a new file or folder using the `create` TOML key.

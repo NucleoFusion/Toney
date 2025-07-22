@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
@@ -60,6 +61,10 @@ func (m FileExplorer) Init() tea.Cmd {
 
 func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case messages.FzfSelection:
+		m.FindWithRelativePath(msg.Selection)
+		m.Refresh()
+		return m, m.SelectionChanged(m.CurrentNode)
 	case messages.EditorClose:
 		m.Refresh()
 		return m, m.SelectionChanged(m.CurrentNode)
@@ -207,4 +212,39 @@ func (m *FileExplorer) Refresh() {
 
 	m.CurrentIndex = idx
 	m.CurrentNode = m.VisibleNodes[idx]
+}
+
+func (m *FileExplorer) FindWithRelativePath(path string) {
+	cleanPath := filepath.ToSlash(path)
+	parts := strings.Split(cleanPath, "/")
+
+	i := 0
+	curr := m.Root
+	for {
+		if !curr.IsDirectory {
+			break
+		}
+
+		for _, v := range curr.Children { // Moving across the tree
+			if v.Name == parts[i] {
+				curr = v
+				if curr.IsDirectory {
+					curr.IsExpanded = true
+				}
+				break
+			}
+		}
+
+		i++
+	}
+
+	m.CurrentNode = curr
+	m.VisibleNodes = filetree.FlattenVisibleTree(m.Root)
+
+	currPath := filepopup.GetPath(curr)
+	for k, v := range m.VisibleNodes {
+		if filepopup.GetPath(v) == currPath {
+			m.CurrentIndex = k
+		}
+	}
 }

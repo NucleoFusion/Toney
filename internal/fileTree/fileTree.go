@@ -1,6 +1,7 @@
 package filetree
 
 import (
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -99,4 +100,27 @@ func BuildNodeTree(n *Node, prefix string, isLast bool, curr *Node) string {
 	}
 
 	return sb.String()
+}
+
+func ListFilesRel(baseDir string) ([]string, error) {
+	var relPaths []string
+
+	err := filepath.WalkDir(baseDir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			return nil
+		}
+		rel, err := filepath.Rel(baseDir, path)
+		if err != nil {
+			return err
+		}
+		relPaths = append(relPaths, rel)
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return relPaths, nil
 }

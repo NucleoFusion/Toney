@@ -38,3 +38,11 @@ default value is:
 down = "down"
 ```
 
+##  Exit 
+
+can change the keybind for exiting using the `exit` toml key.
+
+default value is:
+```toml
+exit = "esc"
+```

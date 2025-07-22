@@ -12,6 +12,7 @@ type FuzzyMap struct {
 	Up           key.Binding
 	Down         key.Binding
 	Enter        key.Binding
+	Exit         key.Binding
 }
 
 func NewFuzzyMap() FuzzyMap {
@@ -32,6 +33,10 @@ func NewFuzzyMap() FuzzyMap {
 		Enter: key.NewBinding(
 			key.WithKeys(cfg.Enter),
 			key.WithHelp(cfg.Enter, "enter"),
+		),
+		Exit: key.NewBinding(
+			key.WithKeys(cfg.Exit),
+			key.WithHelp(cfg.Exit, "exit"),
 		),
 	}
 }
