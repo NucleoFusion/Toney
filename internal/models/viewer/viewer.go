@@ -68,6 +68,7 @@ func (m *Viewer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.Path = msg.Path
 		content := m.ReadFile(false)
 		m.Viewport.SetContent(content)
+		m.Viewport.YOffset = 0
 		return m, nil
 	case tea.WindowSizeMsg:
 		m.Width = msg.Width
