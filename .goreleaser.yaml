@@ -1,3 +1,5 @@
+version: 2
+
 project_name: toney
 release:
   github:
@@ -27,7 +29,6 @@ archives:
 
 nfpms:
   - id: deb
-    packager: deb
     formats:
       - deb
     section: utils
@@ -39,7 +40,6 @@ nfpms:
     homepage: https://sourcewarelab.github.com/Toney/
 
   - id: rpm
-    packager: rpm
     formats:
       - rpm
     section: utils
