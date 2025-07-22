@@ -2,9 +2,15 @@
 
 **Toney** is a fast, lightweight, terminal-based note-taking app for the modern developer. Built with [Bubbletea](https://github.com/charmbracelet/bubbletea), Toney brings a sleek TUI interface with markdown rendering, file navigation, and native Neovim editing – all in your terminal.
 
+Refer to the docs [here](https://sourcewarelab.github.io/Toney/). To view all the details!
 
 
-https://github.com/user-attachments/assets/bf2411e0-2a7e-4669-a12a-6ee1bb63b75b
+
+
+
+https://github.com/user-attachments/assets/71d4555f-8ea1-4a5c-b1df-c67acbd9248a
+
+
 
 
 
@@ -16,20 +22,16 @@ https://github.com/user-attachments/assets/bf2411e0-2a7e-4669-a12a-6ee1bb63b75b
 - 📝 **Markdown Renderer** – Styled previews via [`glamour`](https://github.com/charmbracelet/glamour).
 - 🧠 **Neovim Integration** – Edit your notes using your favorite editor (`nvim`).
 - 📂 **File Management** – Easily navigate, open, and manage markdown files.
-- 🧩 **Component Architecture** – Modular codebase using Bubbletea’s `Model` system.
+- ✅ **Daily Tasks** – Keep a record of your daily tasks in the `Daily Tasks` section.
+- 📓 **Diary Entries** - Organize and manage your thoughts with the `Diary` section.
+- ⚙️ **Extensive Config** - Configurate the app to look and work exactly as `you` want.
 - 🎨 **TUI Styling** – Clean, responsive interface using `lipgloss`.
 
 ---
 
 ## 🚀 Installation
 
-You can install **Toney** directly using `go install`:
-
-```
-go install github.com/SourcewareLab/Toney@latest
-```
-
-This will download, build, and install the `Toney` binary into your `$GOBIN` (typically `$HOME/go/bin`).
+Refer to the docs [here](https://sourcewarelab.github.io/Toney/guide/install). To view all the installation options!
 
 Run this command to ensure Toney is setup perfectly.
 
@@ -53,30 +55,16 @@ export PATH=$PATH:$(go env GOBIN)
 Once installed, you can run:
 
 ```
-Toney
+Toney init
 ```
 
 ---
 
 ## 🔑 Keybinds
 
-| Key Combination | Action                    |
-|-----------------|---------------------------|
-| **F** / **Shift + F** | Focus on File Tree         |
-| **V** / **Shift + V** | Focus on File Viewer       |
+Refer to the docs [here](https://sourcewarelab.github.io/Toney/config/keybinds/). To view all the Default Keybinds!
 
-### 📁 File Tree Focus Shortcuts
-
-Once the File Tree is focused (`F` or `Shift + F`):
-
-| Key      | Action         |
-|----------|----------------|
-| **c**    | Create a file/folder |
-| **d**    | Delete selected     |
-| **r**    | Rename selected     |
-| **m**    | Move selected       |
-| **Enter**| Edit selected file  |
-
+Keybinds are also visible in the app itself thanks to the `bubbles` component library.
 
 ---
 
@@ -85,31 +73,30 @@ Once the File Tree is focused (`F` or `Shift + F`):
 ### v2.0.0 Goals
 
 - [X] Daily Tasks 
-- [ ] Diary
+- [X] Diary
 - [X] Config File
   - [X] Custom Styles
   - [X] Custom Editor
   - [X] Custom Notes Directory
   - [X] Custom Keybinds
-- [ ] Search In Notes
-- [ ] Search for Notes  
+- [X] Search for Notes  
 - [X] Keybind Helper (using Bubbles)
 
 ### Short Term Goals
 
 - [ ] Overlay support
-- [ ] Viewer style improvements
+- [X] Viewer style improvements
 - [ ] Error popups
 - [X] Separate package for messages
-- [ ] Keybind refactor
-- [ ] Config file support (`~/.config/toney/config.yaml`)
-- [ ] Custom markdown renderer
-- [ ] Custom components:  
-  - [ ] [ ] Task Lists  
-  - [ ] `code` blocks  
-  - [ ] Tables  
+- [X] Keybind refactor
+- [X] Config file support (`~/.config/toney/config.yaml`)
+- [X] Custom markdown renderer
+- [X] Custom components:  
+  - [X] [ ] Task Lists  
+  - [X] `code` blocks  
+  - [X] Tables  
 - [ ] File Import/Export
-- [ ] Configurable external editor support
+- [X] Configurable external editor support
 
 ### Long Term Goals
 
@@ -121,20 +108,23 @@ Once the File Tree is focused (`F` or `Shift + F`):
 ## 🛠️ Project Structure
 
 ```
-toney/
-├── cmd/              # Entry point (main.go)
-├── internal/
-│   ├── models/       # All UI models (Home, Viewer, Popups, etc.)
-│   ├── enums/        # Typed enums (pages, popup types)
-│   ├── messages/     # Message types for tea.Msg (will be modularized)
-│   └── utils/        # Shared utility functions
+├── cmd          // CLI 
+└── internal
+    ├── colors   // Styles Config
+    ├── config   // Config 
+    ├── enums    // All enums
+    ├── fileTree // Filtree - manages tree creation for directory
+    ├── keymap   // Keymap 
+    ├── messages // Messages - has all bubbletea message declarations
+    ├── models   // Models - Has all bubbletea models
+    └── styles   // Styles - has all lipgloss styles declarations
 ```
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Toney follows Go and Bubbletea conventions.
+We welcome contributions! Toney follows Go and Bubbletea conventions. You can also view more details [here](https://sourcewarelab.github.io/Toney/guide/contribute).
 
 ### 🧾 Guidelines
 
