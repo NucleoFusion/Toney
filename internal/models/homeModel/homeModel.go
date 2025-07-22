@@ -62,12 +62,19 @@ func (m *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.ShowFinder = false
 			return m, nil
 		}
+
 		updated, cmd := m.FileExplorer.Update(msg)
 		if fe, ok := updated.(*fileexplorer.FileExplorer); ok { // Type matching, cause I cant assign it straightaway
 			m.FileExplorer = fe
-			m.ShowFinder = false
-			return m, cmd
 		}
+
+		updated, cmd = m.Viewer.Update(cmd())
+		if v, ok := updated.(*viewer.Viewer); ok { // Type matching, cause I cant assign it straightaway
+			m.Viewer = v
+		}
+
+		m.ShowFinder = false
+		return m, cmd
 	case messages.ShowPopupMessage:
 		return m, func() tea.Msg {
 			return msg
