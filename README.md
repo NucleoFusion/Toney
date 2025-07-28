@@ -36,26 +36,16 @@ Refer to the docs [here](https://sourcewarelab.github.io/Toney/guide/install). T
 Run this command to ensure Toney is setup perfectly.
 
 ```
-  Toney init
+  toney init
 ```
 
-### 🧪 Requirements
-
-- Go 1.16 or later
-- Git (to fetch the module)
-
-Make sure your `GOBIN` is in your system's `PATH`:
-
-```
-export PATH=$PATH:$(go env GOBIN)
-```
 
 ### ✅ Verify Installation
 
 Once installed, you can run:
 
 ```
-Toney init
+toney init
 ```
 
 ---
@@ -72,31 +62,13 @@ Keybinds are also visible in the app itself thanks to the `bubbles` component li
 
 ### v2.0.0 Goals
 
-- [X] Daily Tasks 
-- [X] Diary
-- [X] Config File
-  - [X] Custom Styles
-  - [X] Custom Editor
-  - [X] Custom Notes Directory
-  - [X] Custom Keybinds
-- [X] Search for Notes  
-- [X] Keybind Helper (using Bubbles)
-
-### Short Term Goals
-
-- [ ] Overlay support
-- [X] Viewer style improvements
-- [ ] Error popups
-- [X] Separate package for messages
-- [X] Keybind refactor
-- [X] Config file support (`~/.config/toney/config.yaml`)
-- [X] Custom markdown renderer
-- [X] Custom components:  
-  - [X] [ ] Task Lists  
-  - [X] `code` blocks  
-  - [X] Tables  
+- [ ] Overlay Error Popups
 - [ ] File Import/Export
-- [X] Configurable external editor support
+- [ ] Fuzzy Finder in notes
+- [ ] Recurring and Unique Daily tasks
+- [ ] Nvim TODO Integration
+- [ ] Github Issues Integration
+- [ ] Bug solve
 
 ### Long Term Goals
 
