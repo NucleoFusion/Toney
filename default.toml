@@ -1,0 +1,848 @@
+[General]
+Editor = ['nvim']
+NotesDir = '.toney'
+
+[Styles]
+Text = '#cdd6f4'
+Background = '#1e1e2e'
+Border = '#45475a'
+FocusedBorder = '#b4befe'
+MenuSelectedBg = '#b4befe'
+MenuSelectedText = '#1e1e2e'
+
+[Styles.Icons]
+FolderIcon = '󰷏'
+FileIcon = ''
+
+[Styles.Icons.TaskIcons]
+CompletedIcon = '✓'
+PendingIcon = '~'
+AbandonedIcon = '×'
+StartedIcon = '○'
+
+[Styles.Renderer]
+ItemPrefix = "\u001B[38;2;69;71;89m• \u001B[0m"
+EnumerationPrefix = '. '
+
+[Styles.Renderer.Document]
+Format = ''
+BlockPrefix = "\n"
+BlockSuffix = "\n"
+Prefix = ''
+Suffix = ''
+IndentToken = ''
+Margin = 1
+Padding = 0
+Indent = 0
+Color = '#cdd6f4'
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[Styles.Renderer.BlockQuote]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+IndentToken = '│ '
+Margin = 0
+Padding = 0
+Indent = 1
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[Styles.Renderer.Heading]
+[Styles.Renderer.Heading.Base]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = "\n"
+Prefix = ''
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = '#94e2d5'
+Background = ''
+Bold = true
+Italic = false
+Underline = false
+
+[[Styles.Renderer.Heading.Levels]]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ' '
+Suffix = ' '
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = '#74c7ec'
+Background = '#313244'
+Bold = true
+Italic = false
+Underline = false
+
+[[Styles.Renderer.Heading.Levels]]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = '## '
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[[Styles.Renderer.Heading.Levels]]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = '### '
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[[Styles.Renderer.Heading.Levels]]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = '#### '
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[[Styles.Renderer.Heading.Levels]]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = '##### '
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[[Styles.Renderer.Heading.Levels]]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = '###### '
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = '#9399b2'
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[Styles.Renderer.HorizontalRule]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = '#585b70'
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = "\n────────\n"
+
+[Styles.Renderer.Paragraph]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+
+[Styles.Renderer.List]
+LevelIndent = 2
+
+[Styles.Renderer.List.Styles]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = "\n"
+Color = '#cdd6f4'
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.List.Task]
+Ticked = "\u001B[38;2;166;227;161m• [✓] \u001B[0m"
+Unticked = "\u001B[38;2;88;91;112m• [ ] \u001B[0m"
+
+[Styles.Renderer.Enumeration]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.Link]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = '#89b4fa'
+Background = ''
+Bold = false
+Italic = false
+Underline = true
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.Image]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = '#fab387'
+Background = ''
+Bold = false
+Italic = false
+Underline = true
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.Emph]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = '#89b4fa'
+Background = ''
+Bold = false
+Italic = true
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.Strong]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = '#74c7ec'
+Background = ''
+Bold = true
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.Strikethrough]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = '#f38ba8'
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = true
+Format = ''
+
+[Styles.Renderer.Code]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ' '
+Suffix = ' '
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = '#89dceb'
+Background = '#11111b'
+Bold = false
+Italic = false
+Underline = false
+
+[Styles.Renderer.CodeBlock]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+IndentToken = ''
+Margin = 1
+Padding = 0
+Indent = 0
+Color = '#89dceb'
+Background = '#11111b'
+Bold = false
+Italic = false
+Underline = false
+Theme = ''
+
+[Styles.Renderer.CodeBlock.Text]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = '#cdd6f4'
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Error]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Comment]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.CommentPreproc]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Keyword]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.KeywordReserved]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.KeywordNamespace]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.KeywordType]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Operator]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Punctuation]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Name]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameBuiltin]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameTag]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameAttribute]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameClass]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameConstant]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameDecorator]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameException]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameFunction]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.NameOther]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Literal]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.LiteralNumber]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.LiteralDate]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.LiteralString]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.LiteralStringEscape]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.GenericDeleted]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.GenericEmph]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.GenericInserted]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.GenericStrong]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.GenericSubheading]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.CodeBlock.Background]
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+Color = ''
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+Strikethrough = false
+Format = ''
+
+[Styles.Renderer.Table]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = '#cdd6f4'
+Background = ''
+Bold = false
+Italic = false
+Underline = false
+CenterSeparator = '|'
+ColumnSeparator = '|'
+RowSeparator = '-'
+
+[Styles.Renderer.Table.Header]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = '#f5c2e7'
+Background = '#1e1e2e'
+Bold = true
+Italic = false
+Underline = false
+
+[Styles.Renderer.Table.Cell]
+Format = ''
+BlockPrefix = ''
+BlockSuffix = ''
+Prefix = ''
+Suffix = ''
+IndentToken = ''
+Margin = 0
+Padding = 0
+Indent = 0
+Color = '#cdd6f4'
+Background = '#1e1e2e'
+Bold = false
+Italic = false
+Underline = false
+
+[Styles.TaskStyles]
+FocusedBar = '#b4befe'
+UnfocusedBar = '#45475a'
+
+[Styles.TaskStyles.CompletedStyle]
+Title = '#a6e3a1'
+Desc = '#5a7a57'
+
+[Styles.TaskStyles.PendingStyle]
+Title = '#6c7086'
+Desc = '#313244'
+
+[Styles.TaskStyles.AbandonedStyle]
+Title = '#f38ba8'
+Desc = '#894454'
+
+[Styles.TaskStyles.StartedStyle]
+Title = '#f9e2af'
+Desc = '#a38e65'
+
+[Keybinds]
+[Keybinds.Global]
+Up = 'up'
+Down = 'down'
+
+[Keybinds.Home]
+BackToMenu = 'esc'
+FocusViewer = 'V'
+FocusExplorer = 'F'
+Create = 'c'
+Rename = 'r'
+Move = 'm'
+Delete = 'd'
+Edit = 'enter'
+ScrollUp = 'up'
+ScrollDown = 'down'
+Finder = 'f'
+
+[Keybinds.Daily]
+Create = 'c'
+CreateRecurring = 'r'
+Delete = 'd'
+StatusChange = 's'
+Edit = 'e'
+BackToMenu = 'esc'
+FormUp = 'ctrl+up'
+FormDown = 'ctrl+down'
+ExitPopup = 'esc'
+Enter = 'enter'
+
+[Keybinds.Fuzz]
+StartWriting = '/'
+Up = 'up'
+Down = 'down'
+Enter = 'enter'
+Exit = 'esc'
+
+[Keybinds.Diary]
+Edit = 'e'
+ScrollUp = 'up'
+ScrollDown = 'down'
+Finder = 'f'
+BackToMenu = 'esc'
