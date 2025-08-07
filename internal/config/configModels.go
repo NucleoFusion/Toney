@@ -7,6 +7,9 @@ type Config struct {
 }
 
 type GeneralConfig struct {
-	Editor   []string `mapstructure:"editor"`
-	NotesDir string   `mapstructure:"notes_dir"`
+	Editor      []string `mapstructure:"editor"`
+	NotesDir    string   `mapstructure:"notes_dir"`
+	StartScript []string `mapstructure:"start_script"`
+	StopScript  []string `mapstructure:"stop_script"`
+	Script      []string `mapstructure:"script"`
 }

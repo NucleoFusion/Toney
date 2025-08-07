@@ -5,13 +5,17 @@ import "github.com/charmbracelet/lipgloss"
 func DefaultConfig() Config {
 	return Config{
 		General: GeneralConfig{
-			Editor:   []string{"nvim"},
-			NotesDir: ".toney", // From $HOME Directory
+			Editor:      []string{"nvim"},
+			NotesDir:    ".toney", // From $HOME Directory
+			StartScript: []string{},
+			StopScript:  []string{},
+			Script:      []string{},
 		},
 		Keybinds: KeybindsConfig{
 			Global: GlobalKeybinds{
-				Up:   "up",
-				Down: "down",
+				Up:     "up",
+				Down:   "down",
+				Script: "ctrl+s",
 			},
 			Fuzz: FuzzyKeybinds{
 				Up:           "up",
