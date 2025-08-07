@@ -20,3 +20,11 @@ default value is:
 down = "down"
 ```
 
+## Script 
+
+can change the keybind for executing a command/script using the `script` toml key. The internal working, adds `bash -c` so you may omit it. 
+
+default value is:
+```toml
+script = []
+```
