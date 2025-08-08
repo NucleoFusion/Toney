@@ -53,10 +53,27 @@ func GetItems() Tasks {
 
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
-		_, err2 := os.Create(path)
+		f, err2 := os.Create(path)
 		if err2 != nil {
 			fmt.Println(err2.Error())
 		}
+
+		content, err2 := os.ReadFile(GetYesterdayPath())
+		if err2 != nil {
+			fmt.Println(err2.Error())
+		}
+
+		tasks := Tasks{}
+		json.Unmarshal(content, &tasks)
+
+		tasks.Unique = make([]Task, 0)
+
+		data, err2 := json.Marshal(tasks)
+		if err2 != nil {
+			fmt.Println(err2.Error())
+		}
+
+		f.Write(data)
 	} else if err != nil {
 		fmt.Println("Error: ", err.Error())
 	}
@@ -86,4 +103,10 @@ func GetPath() string {
 	date := time.Now().Format("2006-01-02")
 
 	return filepath.Join(home, config.AppConfig.General.NotesDir, ".daily", date)
+}
+
+func GetYesterdayPath() string {
+	home, _ := os.UserHomeDir()
+	yesterday := time.Now().AddDate(0, 0, -1).Format("2006-01-02")
+	return filepath.Join(home, config.AppConfig.General.NotesDir, ".daily", yesterday)
 }

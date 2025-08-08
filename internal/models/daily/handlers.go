@@ -7,15 +7,18 @@ import (
 	"github.com/SourcewareLab/Toney/internal/messages"
 )
 
-func (m Daily) CreateTask(msg messages.TaskPopupMessage) {
+func (m Daily) CreateTask(msg messages.TaskPopupMessage, isUnique bool) {
 	task := Task{
 		TaskTitle: msg.Title,
 		TaskDesc:  msg.Desc,
 		Status:    msg.Status,
 	}
 
-	m.Tasks.Unique = append(m.Tasks.Unique, task) // Seperate Task Input for recurring / unique tasks
-
+	if isUnique {
+		m.Tasks.Unique = append(m.Tasks.Unique, task) // Seperate Task Input for recurring / unique tasks
+	} else {
+		m.Tasks.Recurring = append(m.Tasks.Recurring, task) // Seperate Task Input for recurring / unique tasks
+	}
 	WriteItems(m.Tasks)
 }
 

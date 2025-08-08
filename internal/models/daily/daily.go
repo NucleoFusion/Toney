@@ -52,8 +52,10 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case messages.TaskPopupMessage:
 		switch msg.Type {
-		case enums.Create:
-			m.CreateTask(msg)
+		case enums.CreateRecurring:
+			fallthrough
+		case enums.CreateUnique:
+			m.CreateTask(msg, msg.Type == enums.CreateUnique)
 		case enums.Delete:
 			m.DeleteTask(msg)
 		case enums.ChangeStatus:
@@ -74,8 +76,12 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		}
 		switch {
-		case key.Matches(msg, m.Keymap.CreateTask):
-			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.Create)
+		case key.Matches(msg, m.Keymap.CreateUnique):
+			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.CreateUnique)
+			m.ShowPopup = true
+			return m, nil
+		case key.Matches(msg, m.Keymap.CreateRecurring):
+			m.Popup = taskpopup.NewPopup(m.Width, m.Height, enums.CreateRecurring)
 			m.ShowPopup = true
 			return m, nil
 		case key.Matches(msg, m.Keymap.ChangeStatus):
