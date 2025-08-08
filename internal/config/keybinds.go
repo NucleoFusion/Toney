@@ -25,8 +25,9 @@ type DiaryKeybinds struct {
 }
 
 type GlobalKeybinds struct {
-	Up   string `mapstructure:"up"`
-	Down string `mapstructure:"down"`
+	Up     string `mapstructure:"up"`
+	Down   string `mapstructure:"down"`
+	Script string `mapstructure:"script"`
 }
 
 type DailyKeybinds struct {

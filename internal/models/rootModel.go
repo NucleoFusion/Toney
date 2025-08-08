@@ -2,7 +2,11 @@ package models
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+	"strings"
 
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/messages"
 	"github.com/SourcewareLab/Toney/internal/models/daily"
@@ -123,7 +127,30 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case tea.KeyMsg:
 		switch msg.String() {
+		case config.AppConfig.Keybinds.Global.Script:
+			// Script
+			script := strings.Join(config.AppConfig.General.Script, " ")
+			command := exec.Command("bash", "-c", script)
+
+			command.Stdout = os.Stdout
+			command.Stderr = os.Stderr
+
+			err := command.Run()
+			if err != nil {
+				fmt.Println(err.Error())
+			}
 		case "ctrl+c":
+			// Stop script
+			script := strings.Join(config.AppConfig.General.StopScript, " ")
+			command := exec.Command("bash", "-c", script)
+
+			command.Stdout = os.Stdout
+			command.Stderr = os.Stderr
+
+			err := command.Run()
+			if err != nil {
+				fmt.Println(err.Error())
+			}
 			return m, tea.Quit
 		}
 

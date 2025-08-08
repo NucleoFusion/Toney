@@ -21,3 +21,30 @@ default value is:
 ```toml
 editor = ["nvim"]
 ```
+
+## Start Script 
+
+runs a script/bash command on startup using the `start_script` key, it takes an array. The internal working, adds `bash -c` so you may omit it. 
+
+default value is:
+```toml
+start_script = []
+```
+
+## Stop Script 
+
+runs a script/bash command on quit/exit using the `stop_script` key, it takes an array. The internal working, adds `bash -c` so you may omit it. 
+
+default value is:
+```toml
+stop_script = []
+```
+
+## Script 
+
+runs a script/bash command on keybind using the `script` key, it takes an array. The internal working, adds `bash -c` so you may omit it. 
+
+default value is:
+```toml
+script = []
+```
