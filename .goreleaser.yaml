@@ -28,44 +28,25 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        format: zip
+        formats: ['zip']
 
-brews:
+homebrew_casks:
   - name: toney 
-    github:
-      owner: SourcewareLab 
-      name: toney
-      branch: dev
-    folder: Formula
+    binary: toney
     description: "Toney - a fast, lightweight terminal-based note-taking app"
-    homepage: https://sourcewarelab.github.io/Toney/
+    homepage: "https://sourcewarelab.github.io/Toney/"
+    url:
+      template: "https://github.com/SourcewareLab/Toney/releases/download/v{{ .Version }}/toney_darwin_amd64.tar.gz"
+    uninstall:
+      delete:
+        - "/usr/local/bin/toney"
+    repository:
+      owner: SourcewareLab
+      name: homebrew-tap
+      token: "{{ .Env.GITHUB_TOKEN }}"
     commit_author:
       name: NucleoFusion 
       email: lakshit.singh.mail@gmail.com 
-    install: |
-      bin.install "toney"
-
-scoop:
-  name: toney
-  folder: scoop 
-  description: "Toney - a fast, lightweight terminal-based note-taking app"
-  homepage: https://sourcewarelab.github.io/Toney/
-  bucket:
-    name: toney
-    owner: SourcewareLab
-    branch: dev 
-    commit_author:
-      name: NucleoFusion
-      email: lakshit.singh.mail@gmail.com
-
-snapcrafts:
-  - name: toney
-    summary: "Fast, lightweight terminal-based note-taking app"
-    description: |
-      Toney is a fast, lightweight and extensible note-taking app that works directly from your terminal.
-    confinement: classic
-    grade: stable
-    license: MIT
 
 nfpms:
   - id: deb
