@@ -46,7 +46,10 @@ func (m *TaskPopup) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, m.Keymap.Enter):
-			if m.Type == enums.CreateUnique || m.Type == enums.CreateRecurring && !m.ShowSelect {
+			if m.Type == enums.CreateUnique && !m.ShowSelect {
+				m.ShowSelect = true
+				return m, nil
+			} else if m.Type == enums.CreateRecurring && !m.ShowSelect {
 				m.ShowSelect = true
 				return m, nil
 			}
