@@ -16,6 +16,7 @@ import (
 	filepopup "github.com/SourcewareLab/Toney/internal/models/filePopup"
 	homemodel "github.com/SourcewareLab/Toney/internal/models/homeModel"
 	"github.com/SourcewareLab/Toney/internal/models/menu"
+	"github.com/SourcewareLab/Toney/internal/utils"
 	overlay "github.com/rmhubbert/bubbletea-overlay"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
@@ -143,7 +144,7 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		}
 		if msg.Err != nil {
-			fmt.Println(msg.Err.Error())
+			return m, utils.ReturnError("Root", "Error Closing Editor", msg.Err)
 		}
 		m.Home.FileExplorer.Update(msg)
 		m.Home.Viewer.Update(msg)
@@ -162,7 +163,7 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			err := command.Run()
 			if err != nil {
-				fmt.Println(err.Error())
+				return m, utils.ReturnError("Root", "Error Closing Editor", err)
 			}
 			return m, nil
 		case "ctrl+c":
@@ -175,7 +176,7 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 			err := command.Run()
 			if err != nil {
-				fmt.Println(err.Error())
+				return m, utils.ReturnError("Root", "Error Closing Editor", err)
 			}
 			return m, tea.Quit
 		}
