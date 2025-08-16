@@ -1,6 +1,8 @@
 package daily
 
 import (
+	"fmt"
+
 	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/keymap"
@@ -15,14 +17,16 @@ import (
 )
 
 type Daily struct {
-	Width     int
-	Height    int
-	List      list.Model
-	Tasks     Tasks
-	Popup     *taskpopup.TaskPopup
-	ShowPopup bool
-	Keymap    keymap.DailyTaskMap
-	Help      help.Model
+	Width      int
+	Height     int
+	List       list.Model
+	Tasks      Tasks
+	Popup      *taskpopup.TaskPopup
+	ShowPopup  bool
+	Keymap     keymap.DailyTaskMap
+	Help       help.Model
+	CurrentTab int
+	Tabs       []enums.TaskTabs
 }
 
 func NewDaily(w int, h int) *Daily {
@@ -33,14 +37,17 @@ func NewDaily(w int, h int) *Daily {
 	km.Quit.Unbind()
 	lst.KeyMap = km
 	lst.SetShowHelp(false)
+	lst.SetShowTitle(false)
 
 	return &Daily{
-		Width:  w,
-		Height: h,
-		List:   lst,
-		Tasks:  tasks,
-		Keymap: keymap.NewDailyTaskMap(),
-		Help:   help.New(),
+		Width:      w,
+		Height:     h,
+		List:       lst,
+		Tasks:      tasks,
+		Keymap:     keymap.NewDailyTaskMap(),
+		Help:       help.New(),
+		CurrentTab: 0,
+		Tabs:       []enums.TaskTabs{enums.All, enums.Unique, enums.Recurring, enums.Github},
 	}
 }
 
@@ -112,6 +119,18 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					Page: enums.MenuPage,
 				}
 			}
+		case key.Matches(msg, m.Keymap.TabRight):
+			m.CurrentTab++
+			if m.CurrentTab >= len(m.Tabs) {
+				m.CurrentTab = m.CurrentTab % len(m.Tabs)
+			}
+			return m, nil
+		case key.Matches(msg, m.Keymap.TabLeft):
+			m.CurrentTab--
+			if m.CurrentTab < 0 {
+				m.CurrentTab = len(m.Tabs) + m.CurrentTab
+			}
+			return m, nil
 		}
 	}
 
@@ -129,7 +148,8 @@ func (m *Daily) View() string {
 
 	main := lipgloss.JoinVertical(lipgloss.Left,
 		styles.GetDailyText(m.Width, m.Height/3),
-		lipgloss.Place(m.Width, 2*m.Height/3, lipgloss.Center, lipgloss.Center, m.List.View()))
+		m.GetTabs(),
+		lipgloss.Place(m.Width, 2*m.Height/3, lipgloss.Center, lipgloss.Left, m.List.View()))
 
 	if len(m.List.Items()) == 0 {
 		main = lipgloss.JoinVertical(lipgloss.Left,
@@ -141,6 +161,20 @@ func (m *Daily) View() string {
 	help := lipgloss.NewStyle().PaddingLeft(2).Render(m.Help.View(keymap.NewDynamic(m.Keymap.Bindings())))
 
 	return lipgloss.JoinVertical(lipgloss.Left, main, help)
+}
+
+func (m *Daily) GetTabs() string {
+	style := lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Background(colors.ColorPalette().ErrorBg).Padding(0, 1)
+
+	text := ""
+	for _, v := range m.Tabs {
+		style := style
+		if v == m.Tabs[m.CurrentTab] {
+			style = style.Background(colors.ColorPalette().MenuSelectedBg).Foreground(colors.ColorPalette().MenuSelectedText)
+		}
+		text += fmt.Sprintf(" %s ", style.Render(string(v)))
+	}
+	return lipgloss.PlaceHorizontal(m.Width, lipgloss.Center, text)
 }
 
 func (m *Daily) Refresh() {

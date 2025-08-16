@@ -13,9 +13,27 @@ import (
 )
 
 type Tasks struct {
-	Recurring []Task `json:"recurring"`
-	Unique    []Task `json:"unique"`
+	Recurring []Task       `json:"recurring"`
+	Unique    []Task       `json:"unique"`
+	Github    []GithubTask `json:"github"`
 }
+
+type GithubTask struct {
+	TaskTitle string           `json:"title"`
+	TaskDesc  string           `json:"desc"`
+	Status    enums.TaskStatus `json:"status"`
+	Ref       string           `json:"ref"`
+	Repo      string           `json:"repo"`
+	Owner     string           `json:"owner"`
+	// We will not store these data in the file
+	Link     string   `json:"-"`
+	Labels   []string `json:"-"`
+	Assignee []string `json:"-"`
+}
+
+func (m GithubTask) Title() string       { return m.TaskTitle }
+func (m GithubTask) Description() string { return m.TaskDesc }
+func (m GithubTask) FilterValue() string { return m.TaskTitle }
 
 type Task struct {
 	TaskTitle string           `json:"title"`
