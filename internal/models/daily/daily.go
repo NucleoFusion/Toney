@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
@@ -124,12 +125,16 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if m.CurrentTab >= len(m.Tabs) {
 				m.CurrentTab = m.CurrentTab % len(m.Tabs)
 			}
+
+			m.Refresh()
 			return m, nil
 		case key.Matches(msg, m.Keymap.TabLeft):
 			m.CurrentTab--
 			if m.CurrentTab < 0 {
 				m.CurrentTab = len(m.Tabs) + m.CurrentTab
 			}
+
+			m.Refresh()
 			return m, nil
 		}
 	}
@@ -164,7 +169,8 @@ func (m *Daily) View() string {
 }
 
 func (m *Daily) GetTabs() string {
-	style := lipgloss.NewStyle().Foreground(colors.ColorPalette().Text).Background(colors.ColorPalette().ErrorBg).Padding(0, 1)
+	cfg := config.AppConfig.Styles.Renderer.Heading.Levels[0] // Using the same Heading choice as renderer
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color(cfg.Color)).Background(lipgloss.Color(cfg.Background)).Padding(0, 1)
 
 	text := ""
 	for _, v := range m.Tabs {
@@ -180,11 +186,21 @@ func (m *Daily) GetTabs() string {
 func (m *Daily) Refresh() {
 	m.Tasks = GetItems()
 
-	lst := list.New(m.Tasks.ItemsAsList(), TaskDelegate{}, m.Width/2, 2*m.Height/3)
+	curr := m.Tasks.ItemsAsList()
+	switch m.Tabs[m.CurrentTab] {
+	case enums.Unique:
+		curr = TaskToItems(m.Tasks.Unique)
+	case enums.Recurring:
+		curr = TaskToItems(m.Tasks.Recurring)
+		// TODO: Github
+	}
+
+	lst := list.New(curr, TaskDelegate{}, m.Width/2, 2*m.Height/3)
 	km := list.DefaultKeyMap()
 	km.Quit.Unbind()
 	lst.KeyMap = km
 	lst.SetShowHelp(false)
+	lst.SetShowTitle(false)
 
 	m.List = lst
 }

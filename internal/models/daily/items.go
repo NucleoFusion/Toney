@@ -49,20 +49,19 @@ func (m Task) Description() string { return m.TaskDesc }
 func (m Task) FilterValue() string { return m.TaskTitle }
 
 func (m Tasks) ItemsAsList() []list.Item {
-	list := make([]list.Item, 0, len(m.Recurring)+len(m.Unique))
+	lst1 := TaskToItems(m.Recurring)
+	lst2 := TaskToItems(m.Unique)
 
-	for i, v := range m.Recurring {
+	return append(lst1, lst2...)
+}
+
+func TaskToItems(tasks []Task) []list.Item {
+	list := make([]list.Item, 0)
+	for i, v := range tasks {
 		v.Index = i
 		v.TaskType = enums.RecurringTask
 		list = append(list, v)
 	}
-
-	for i, v := range m.Unique {
-		v.Index = i
-		v.TaskType = enums.UniqueTask
-		list = append(list, v)
-	}
-
 	return list
 }
 
