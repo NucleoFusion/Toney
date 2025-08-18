@@ -2,6 +2,7 @@ package daily
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
 	"github.com/SourcewareLab/Toney/internal/config"
@@ -10,6 +11,7 @@ import (
 	"github.com/SourcewareLab/Toney/internal/messages"
 	taskpopup "github.com/SourcewareLab/Toney/internal/models/taskPopup"
 	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/internal/utils"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
@@ -31,7 +33,11 @@ type Daily struct {
 }
 
 func NewDaily(w int, h int) *Daily {
-	tasks := GetItems()
+	tasks, err := GetItems()
+	if err != nil {
+		log.Fatal("Error Querying Tasks: ", err)
+		return nil
+	}
 
 	lst := list.New(tasks.ItemsAsList(), TaskDelegate{}, w/2, 2*h/3)
 	km := list.DefaultKeyMap()
@@ -72,7 +78,11 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.EditTask(msg)
 		}
 
-		m.Refresh()
+		err := m.Refresh()
+		if err != nil {
+			return m, utils.ReturnError("Tasks Page", "Error Parsing Tasks", err)
+		}
+
 		m.ShowPopup = false
 		return m, nil
 	case tea.KeyMsg:
@@ -126,7 +136,11 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.CurrentTab = m.CurrentTab % len(m.Tabs)
 			}
 
-			m.Refresh()
+			err := m.Refresh()
+			if err != nil {
+				return m, utils.ReturnError("Tasks Page", "Error Parsing Tasks", err)
+			}
+
 			return m, nil
 		case key.Matches(msg, m.Keymap.TabLeft):
 			m.CurrentTab--
@@ -134,7 +148,11 @@ func (m *Daily) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.CurrentTab = len(m.Tabs) + m.CurrentTab
 			}
 
-			m.Refresh()
+			err := m.Refresh()
+			if err != nil {
+				return m, utils.ReturnError("Tasks Page", "Error Parsing Tasks", err)
+			}
+
 			return m, nil
 		}
 	}
@@ -183,15 +201,20 @@ func (m *Daily) GetTabs() string {
 	return lipgloss.PlaceHorizontal(m.Width, lipgloss.Center, text)
 }
 
-func (m *Daily) Refresh() {
-	m.Tasks = GetItems()
+func (m *Daily) Refresh() error {
+	tasks, err := GetItems()
+	if err != nil {
+		return err
+	}
+
+	m.Tasks = tasks
 
 	curr := m.Tasks.ItemsAsList()
 	switch m.Tabs[m.CurrentTab] {
 	case enums.Unique:
-		curr = TaskToItems(m.Tasks.Unique)
+		curr = TaskToItems(m.Tasks.Unique, enums.RecurringTask)
 	case enums.Recurring:
-		curr = TaskToItems(m.Tasks.Recurring)
+		curr = TaskToItems(m.Tasks.Recurring, enums.UniqueTask)
 		// TODO: Github
 	}
 
@@ -203,4 +226,5 @@ func (m *Daily) Refresh() {
 	lst.SetShowTitle(false)
 
 	m.List = lst
+	return nil
 }

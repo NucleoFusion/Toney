@@ -5,4 +5,5 @@ type TaskType int
 const (
 	RecurringTask = iota
 	UniqueTask
+	TodoTask
 )

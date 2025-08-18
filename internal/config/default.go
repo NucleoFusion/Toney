@@ -10,6 +10,9 @@ func DefaultConfig() Config {
 			StartScript: []string{},
 			StopScript:  []string{},
 			Script:      []string{},
+			Todo: TodoConfig{
+				Projects: []TodoProject{},
+			},
 		},
 		Keybinds: KeybindsConfig{
 			Global: GlobalKeybinds{

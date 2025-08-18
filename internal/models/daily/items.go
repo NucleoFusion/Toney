@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"time"
 
@@ -16,6 +17,7 @@ type Tasks struct {
 	Recurring []Task       `json:"recurring"`
 	Unique    []Task       `json:"unique"`
 	Github    []GithubTask `json:"github"`
+	Todo      []TodoTask   `json:"todo"`
 }
 
 type GithubTask struct {
@@ -31,9 +33,14 @@ type GithubTask struct {
 	Assignee []string `json:"-"`
 }
 
-func (m GithubTask) Title() string       { return m.TaskTitle }
-func (m GithubTask) Description() string { return m.TaskDesc }
-func (m GithubTask) FilterValue() string { return m.TaskTitle }
+type TodoTask struct {
+	TaskType    enums.TaskType   `json:"-"`
+	Status      enums.TaskStatus `json:"status"`
+	ProjectName string           `json:"projectName"`
+	RelPath     string           `json:"relPath"`
+	Text        string           `json:"text"`
+	Line        int              `json:"line"`
+}
 
 type Task struct {
 	TaskTitle string           `json:"title"`
@@ -44,28 +51,65 @@ type Task struct {
 	TaskType enums.TaskType `json:"-"`
 }
 
+func (m TodoTask) Title() string       { return "TODO Head" }
+func (m TodoTask) Description() string { return "TODO Desc" }
+func (m TodoTask) FilterValue() string { return m.Title() }
+
+func (m GithubTask) Title() string       { return m.TaskTitle }
+func (m GithubTask) Description() string { return m.TaskDesc }
+func (m GithubTask) FilterValue() string { return m.TaskTitle }
+
 func (m Task) Title() string       { return m.TaskTitle }
 func (m Task) Description() string { return m.TaskDesc }
 func (m Task) FilterValue() string { return m.TaskTitle }
 
 func (m Tasks) ItemsAsList() []list.Item {
-	lst1 := TaskToItems(m.Recurring)
-	lst2 := TaskToItems(m.Unique)
+	lst1 := TaskToItems(m.Recurring, enums.RecurringTask)
+	lst2 := TaskToItems(m.Unique, enums.UniqueTask)
+	lst3 := TodoTaskToItems(m.Todo)
 
-	return append(lst1, lst2...)
+	return append(lst1, append(lst2, lst3...)...)
 }
 
-func TaskToItems(tasks []Task) []list.Item {
+func TaskToItems(tasks []Task, typ enums.TaskType) []list.Item {
 	list := make([]list.Item, 0)
 	for i, v := range tasks {
 		v.Index = i
-		v.TaskType = enums.RecurringTask
+		v.TaskType = typ
 		list = append(list, v)
 	}
 	return list
 }
 
-func GetItems() Tasks {
+func TodoTaskToItems(tasks []TodoTask) []list.Item {
+	list := make([]list.Item, 0)
+	for _, v := range tasks {
+		v.TaskType = enums.TodoTask
+		list = append(list, v)
+	}
+	return list
+}
+
+func GetItems() (Tasks, error) {
+	tasks := Tasks{}
+
+	uniqueAndRecurring := ReadUniqueAndRecurring()
+	todos, err := ReadTodos()
+	if err != nil {
+		return tasks, err
+	}
+
+	tasks.Todo = todos
+
+	err = json.Unmarshal(uniqueAndRecurring, &tasks)
+	if err != nil {
+		return tasks, err
+	}
+
+	return tasks, nil
+}
+
+func ReadUniqueAndRecurring() []byte {
 	path := GetPath()
 
 	_, err := os.Stat(path)
@@ -97,14 +141,35 @@ func GetItems() Tasks {
 
 	content, _ := os.ReadFile(path)
 
-	tasks := Tasks{}
+	return content
+}
 
-	err = json.Unmarshal(content, &tasks)
-	if err != nil {
-		fmt.Println(err.Error())
+func ReadTodos() ([]TodoTask, error) {
+	projs := config.AppConfig.General.Todo.Projects
+	result := make([]TodoTask, 0)
+
+	for _, v := range projs {
+		var tasks []TodoTask // TODO: Exclude Dir's
+
+		cmd := exec.Command("bash", "-c", fmt.Sprintf(`
+rg -n -i -P --json '(?:\/\/|#|--|/\*+)\s*TODO:?\s*(.*)' %s \
+| jq -r 'select(.type=="match") | {relPath: .data.path.text, line: .data.line_number, text: .data.submatches[0].match.text}' \
+| jq -s .`, v.Path))
+
+		out, err := cmd.Output()
+		if err != nil {
+			return []TodoTask{}, err
+		}
+
+		err = json.Unmarshal(out, &tasks)
+		if err != nil {
+			return []TodoTask{}, err
+		}
+
+		result = append(result, tasks...)
 	}
 
-	return tasks
+	return result, nil
 }
 
 func WriteItems(tasks Tasks) {

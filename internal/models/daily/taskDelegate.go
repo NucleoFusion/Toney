@@ -24,11 +24,28 @@ func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Ite
 		return
 	}
 
-	t, ok := item.(Task)
-	if !ok {
-		return
+	text := ""
+	switch t := item.(type) {
+	case Task:
+		text = DelegateTask(t)
+	case TodoTask:
+		text = "TODO\nA todo task"
 	}
 
+	border := lipgloss.NewStyle().Border(lipgloss.NormalBorder()).
+		PaddingLeft(2).
+		BorderLeft(true).BorderBottom(false).BorderRight(false).BorderTop(false)
+
+	if index == m.Index() {
+		text = border.BorderForeground(colors.ColorPalette().TaskFocusedBar).Render(text)
+	} else {
+		text = border.BorderForeground(colors.ColorPalette().TaskUnfocusedBar).Render(text)
+	}
+
+	io.WriteString(w, text)
+}
+
+func DelegateTask(t Task) string {
 	text := ""
 	cfg := config.AppConfig.Styles.Icons.TaskIcons
 
@@ -55,17 +72,7 @@ func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Ite
 		)
 	}
 
-	border := lipgloss.NewStyle().Border(lipgloss.NormalBorder()).
-		PaddingLeft(2).
-		BorderLeft(true).BorderBottom(false).BorderRight(false).BorderTop(false)
-
-	if index == m.Index() {
-		text = border.BorderForeground(colors.ColorPalette().TaskFocusedBar).Render(text)
-	} else {
-		text = border.BorderForeground(colors.ColorPalette().TaskUnfocusedBar).Render(text)
-	}
-
-	io.WriteString(w, text)
+	return text
 }
 
 func Shorten(s string, maxLen int) string {
