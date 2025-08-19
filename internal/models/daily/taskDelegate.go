@@ -29,7 +29,7 @@ func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Ite
 	case Task:
 		text = DelegateTask(t)
 	case TodoTask:
-		text = "TODO\nA todo task"
+		text = DelegateTODO(t)
 	}
 
 	border := lipgloss.NewStyle().Border(lipgloss.NormalBorder()).
@@ -46,6 +46,36 @@ func (d TaskDelegate) Render(w io.Writer, m list.Model, index int, item list.Ite
 }
 
 func DelegateTask(t Task) string {
+	text := ""
+	cfg := config.AppConfig.Styles.Icons.TaskIcons
+
+	switch t.Status {
+	case enums.Complete:
+		text += fmt.Sprintf("%s\n%s",
+			styles.CompletedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.CompletedIcon, Shorten(t.Title(), 35))),
+			styles.CompletedStyle().Desc.Render(t.Description()),
+		)
+	case enums.Pending:
+		text += fmt.Sprintf("%s\n%s",
+			styles.PendingStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.PendingIcon, Shorten(t.Title(), 35))),
+			styles.PendingStyle().Desc.Render(t.Description()),
+		)
+	case enums.Started:
+		text += fmt.Sprintf("%s\n%s",
+			styles.StartedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.StartedIcon, Shorten(t.Title(), 35))),
+			styles.StartedStyle().Desc.Render(t.Description()),
+		)
+	case enums.Abandoned:
+		text += fmt.Sprintf("%s\n%s",
+			styles.AbandonedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.AbandonedIcon, Shorten(t.Title(), 35))),
+			styles.AbandonedStyle().Desc.Render(t.Description()),
+		)
+	}
+
+	return text
+}
+
+func DelegateTODO(t TodoTask) string {
 	text := ""
 	cfg := config.AppConfig.Styles.Icons.TaskIcons
 

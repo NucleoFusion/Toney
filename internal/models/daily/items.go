@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/SourcewareLab/Toney/internal/config"
@@ -37,6 +38,7 @@ type TodoTask struct {
 	TaskType    enums.TaskType   `json:"-"`
 	Status      enums.TaskStatus `json:"status"`
 	ProjectName string           `json:"projectName"`
+	Path        string           `json:"-"`
 	RelPath     string           `json:"relPath"`
 	Text        string           `json:"text"`
 	Line        int              `json:"line"`
@@ -51,8 +53,10 @@ type Task struct {
 	TaskType enums.TaskType `json:"-"`
 }
 
-func (m TodoTask) Title() string       { return "TODO Head" }
-func (m TodoTask) Description() string { return "TODO Desc" }
+func (m TodoTask) Title() string {
+	return fmt.Sprintf("%s ~ %s:%d", m.ProjectName, m.RelPath, m.Line)
+}
+func (m TodoTask) Description() string { return strings.SplitAfter(m.Text, "TODO:")[1] }
 func (m TodoTask) FilterValue() string { return m.Title() }
 
 func (m GithubTask) Title() string       { return m.TaskTitle }
@@ -93,15 +97,12 @@ func TodoTaskToItems(tasks []TodoTask) []list.Item {
 func GetItems() (Tasks, error) {
 	tasks := Tasks{}
 
-	uniqueAndRecurring := ReadUniqueAndRecurring()
-	todos, err := ReadTodos()
+	content, err := ReadTaskFile()
 	if err != nil {
 		return tasks, err
 	}
 
-	tasks.Todo = todos
-
-	err = json.Unmarshal(uniqueAndRecurring, &tasks)
+	err = json.Unmarshal(content, &tasks)
 	if err != nil {
 		return tasks, err
 	}
@@ -109,7 +110,7 @@ func GetItems() (Tasks, error) {
 	return tasks, nil
 }
 
-func ReadUniqueAndRecurring() []byte {
+func ReadTaskFile() ([]byte, error) {
 	path := GetPath()
 
 	_, err := os.Stat(path)
@@ -129,9 +130,14 @@ func ReadUniqueAndRecurring() []byte {
 
 		tasks.Unique = make([]Task, 0)
 
+		tasks.Todo, err2 = ReadTodos()
+		if err2 != nil {
+			return []byte{}, err
+		}
+
 		data, err2 := json.Marshal(tasks)
 		if err2 != nil {
-			fmt.Println(err2.Error())
+			return []byte{}, err
 		}
 
 		f.Write(data)
@@ -141,7 +147,7 @@ func ReadUniqueAndRecurring() []byte {
 
 	content, _ := os.ReadFile(path)
 
-	return content
+	return content, nil
 }
 
 func ReadTodos() ([]TodoTask, error) {
@@ -164,6 +170,15 @@ rg -n -i -P --json '(?:\/\/|#|--|/\*+)\s*TODO:?\s*(.*)' %s \
 		err = json.Unmarshal(out, &tasks)
 		if err != nil {
 			return []TodoTask{}, err
+		}
+
+		for k, val := range tasks {
+			val.ProjectName = v.Name
+			val.Status = enums.Pending
+			val.Path = v.Path
+			val.RelPath = strings.Replace(val.RelPath, v.Path, ".", 1)
+
+			tasks[k] = val
 		}
 
 		result = append(result, tasks...)
