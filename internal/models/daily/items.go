@@ -39,6 +39,7 @@ type TodoTask struct {
 	Status      enums.TaskStatus `json:"status"`
 	ProjectName string           `json:"projectName"`
 	Path        string           `json:"-"`
+	Index       int              `json:"idx"`
 	RelPath     string           `json:"relPath"`
 	Text        string           `json:"text"`
 	Line        int              `json:"line"`
@@ -49,7 +50,7 @@ type Task struct {
 	TaskDesc  string           `json:"desc"`
 	Status    enums.TaskStatus `json:"status"`
 	// We will not store these data in the file
-	Index    int            `json:"-"` // Point to index in the respective type array
+	Index    int            `json:"idx"` // Point to index in the respective type array
 	TaskType enums.TaskType `json:"-"`
 }
 
@@ -177,6 +178,7 @@ rg -n -i -P --json '(?:\/\/|#|--|/\*+)\s*TODO:?\s*(.*)' %s \
 			val.Status = enums.Pending
 			val.Path = v.Path
 			val.RelPath = strings.Replace(val.RelPath, v.Path, ".", 1)
+			val.Index = len(tasks) + k - 1
 
 			tasks[k] = val
 		}
