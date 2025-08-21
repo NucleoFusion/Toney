@@ -48,3 +48,29 @@ default value is:
 ```toml
 script = []
 ```
+
+
+## Todo 
+
+Configure synchronization with TODO: Comments in a project. Use the `[general.todo]` tag in TOML.
+
+### Enable
+
+can enable/disable todo integration using the `enable` key.
+
+default value is:
+```toml
+enable = false 
+```
+
+### Todo Projects 
+
+can add project directories using the `[[general.todo.todo_projects]]` key which will be searched for TODO comments.
+
+example value is:
+```toml
+[[general.todo.todo_projects]]
+name = "Toney"
+path = "/home/nucleofusion/Programming/projects/toney"
+exclude_dir = []
+```

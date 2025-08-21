@@ -11,6 +11,7 @@ func DefaultConfig() Config {
 			StopScript:  []string{},
 			Script:      []string{},
 			Todo: TodoConfig{
+				Enable:   false,
 				Projects: []TodoProject{},
 			},
 		},

@@ -16,6 +16,7 @@ type GeneralConfig struct {
 }
 
 type TodoConfig struct { // TODO: Include in Docs
+	Enable   bool          `mapstructure:"enable"`
 	Projects []TodoProject `mapstructure:"todo_projects"`
 }
 

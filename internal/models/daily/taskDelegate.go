@@ -52,22 +52,22 @@ func DelegateTask(t Task) string {
 	switch t.Status {
 	case enums.Complete:
 		text += fmt.Sprintf("%s\n%s",
-			styles.CompletedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.CompletedIcon, Shorten(t.Title(), 35))),
+			styles.CompletedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.CompletedIcon, Shorten(t.Title(), 60))),
 			styles.CompletedStyle().Desc.Render(t.Description()),
 		)
 	case enums.Pending:
 		text += fmt.Sprintf("%s\n%s",
-			styles.PendingStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.PendingIcon, Shorten(t.Title(), 35))),
+			styles.PendingStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.PendingIcon, Shorten(t.Title(), 60))),
 			styles.PendingStyle().Desc.Render(t.Description()),
 		)
 	case enums.Started:
 		text += fmt.Sprintf("%s\n%s",
-			styles.StartedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.StartedIcon, Shorten(t.Title(), 35))),
+			styles.StartedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.StartedIcon, Shorten(t.Title(), 60))),
 			styles.StartedStyle().Desc.Render(t.Description()),
 		)
 	case enums.Abandoned:
 		text += fmt.Sprintf("%s\n%s",
-			styles.AbandonedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.AbandonedIcon, Shorten(t.Title(), 35))),
+			styles.AbandonedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.AbandonedIcon, Shorten(t.Title(), 60))),
 			styles.AbandonedStyle().Desc.Render(t.Description()),
 		)
 	}
@@ -82,22 +82,22 @@ func DelegateTODO(t TodoTask) string {
 	switch t.Status {
 	case enums.Complete:
 		text += fmt.Sprintf("%s\n%s",
-			styles.CompletedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.CompletedIcon, Shorten(t.Title(), 35))),
+			styles.CompletedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.CompletedIcon, Shorten(t.Title(), 60))),
 			styles.CompletedStyle().Desc.Render(t.Description()),
 		)
 	case enums.Pending:
 		text += fmt.Sprintf("%s\n%s",
-			styles.PendingStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.PendingIcon, Shorten(t.Title(), 35))),
+			styles.PendingStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.PendingIcon, Shorten(t.Title(), 60))),
 			styles.PendingStyle().Desc.Render(t.Description()),
 		)
 	case enums.Started:
 		text += fmt.Sprintf("%s\n%s",
-			styles.StartedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.StartedIcon, Shorten(t.Title(), 35))),
+			styles.StartedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.StartedIcon, Shorten(t.Title(), 60))),
 			styles.StartedStyle().Desc.Render(t.Description()),
 		)
 	case enums.Abandoned:
 		text += fmt.Sprintf("%s\n%s",
-			styles.AbandonedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.AbandonedIcon, Shorten(t.Title(), 35))),
+			styles.AbandonedStyle().Title.Render(fmt.Sprintf("%s | %s", cfg.AbandonedIcon, Shorten(t.Title(), 60))),
 			styles.AbandonedStyle().Desc.Render(t.Description()),
 		)
 	}

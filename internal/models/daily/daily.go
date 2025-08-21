@@ -39,12 +39,17 @@ func NewDaily(w int, h int) *Daily {
 		return nil
 	}
 
-	lst := list.New(tasks.ItemsAsList(), TaskDelegate{}, w/2, 2*h/3)
+	lst := list.New(tasks.ItemsAsList(), TaskDelegate{}, w*2/3, 2*h/3)
 	km := list.DefaultKeyMap()
 	km.Quit.Unbind()
 	lst.KeyMap = km
 	lst.SetShowHelp(false)
 	lst.SetShowTitle(false)
+
+	tabs := []enums.TaskTabs{enums.All, enums.Unique, enums.Recurring, enums.Github}
+	if config.AppConfig.General.Todo.Enable {
+		tabs = append(tabs, enums.Todo)
+	}
 
 	return &Daily{
 		Width:      w,
@@ -54,7 +59,7 @@ func NewDaily(w int, h int) *Daily {
 		Keymap:     keymap.NewDailyTaskMap(),
 		Help:       help.New(),
 		CurrentTab: 0,
-		Tabs:       []enums.TaskTabs{enums.All, enums.Unique, enums.Recurring, enums.Github},
+		Tabs:       tabs,
 	}
 }
 
@@ -215,6 +220,8 @@ func (m *Daily) Refresh() error {
 		curr = TaskToItems(m.Tasks.Unique, enums.RecurringTask)
 	case enums.Recurring:
 		curr = TaskToItems(m.Tasks.Recurring, enums.UniqueTask)
+	case enums.Todo:
+		curr = TodoTaskToItems(m.Tasks.Todo)
 		// TODO: Github
 	}
 

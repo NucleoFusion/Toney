@@ -39,6 +39,9 @@ func (m Daily) DeleteTask(msg messages.TaskPopupMessage) {
 		}
 	case TodoTask:
 		m.Tasks.Todo = slices.Delete(m.Tasks.Todo, task.Index, task.Index+1)
+		for k := range m.Tasks.Todo {
+			m.Tasks.Todo[k].Index = k
+		}
 	}
 
 	WriteItems(m.Tasks)

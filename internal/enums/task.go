@@ -16,4 +16,5 @@ const (
 	Unique    TaskTabs = "Unique"
 	Recurring TaskTabs = "Recurring"
 	Github    TaskTabs = "Github"
+	Todo      TaskTabs = "Todo"
 )

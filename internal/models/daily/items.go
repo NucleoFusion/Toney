@@ -131,12 +131,14 @@ func ReadTaskFile() ([]byte, error) {
 
 		tasks.Unique = make([]Task, 0)
 
-		tasks.Todo, err2 = ReadTodos()
-		if err2 != nil {
-			return []byte{}, err
+		if config.AppConfig.General.Todo.Enable {
+			tasks.Todo, err2 = ReadTodos()
+			if err2 != nil {
+				return []byte{}, err
+			}
 		}
 
-		data, err2 := json.Marshal(tasks)
+		data, err2 := json.Marshal(&tasks)
 		if err2 != nil {
 			return []byte{}, err
 		}
@@ -178,7 +180,7 @@ rg -n -i -P --json '(?:\/\/|#|--|/\*+)\s*TODO:?\s*(.*)' %s \
 			val.Status = enums.Pending
 			val.Path = v.Path
 			val.RelPath = strings.Replace(val.RelPath, v.Path, ".", 1)
-			val.Index = len(tasks) + k - 1
+			val.Index = len(result) + k
 
 			tasks[k] = val
 		}
