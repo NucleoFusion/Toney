@@ -158,12 +158,17 @@ func ReadTodos() ([]TodoTask, error) {
 	result := make([]TodoTask, 0)
 
 	for _, v := range projs {
-		var tasks []TodoTask // TODO: Exclude Dir's
+		var tasks []TodoTask
+
+		exclude := ""
+		for _, v := range v.Exclude {
+			exclude += fmt.Sprintf(" -g %s ", v)
+		}
 
 		cmd := exec.Command("bash", "-c", fmt.Sprintf(`
-rg -n -i -P --json '(?:\/\/|#|--|/\*+)\s*TODO:?\s*(.*)' %s \
+rg -n -i -P --json '(?:\/\/|#|--|/\*+)\s*TODO:?\s*(.*)' %s %s \
 | jq -r 'select(.type=="match") | {relPath: .data.path.text, line: .data.line_number, text: .data.submatches[0].match.text}' \
-| jq -s .`, v.Path))
+| jq -s .`, v.Path, exclude))
 
 		out, err := cmd.Output()
 		if err != nil {
