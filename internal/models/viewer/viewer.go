@@ -8,8 +8,10 @@ import (
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/keymap"
 	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/SourcewareLab/Toney/internal/models/fzf"
 
 	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/glamour"
@@ -17,15 +19,19 @@ import (
 )
 
 type Viewer struct {
-	IsFocused bool
-	Height    int
-	Width     int
-	Viewport  viewport.Model
-	Ready     bool
-	Path      string
-	isEditing bool
-	Renderer  *glamour.TermRenderer
-	Keymap    keymap.ViewerKeyMap
+	IsFocused   bool
+	Height      int
+	Width       int
+	Viewport    viewport.Model
+	Ready       bool
+	ShowFinder  bool
+	Path        string
+	Content     []string
+	Highlighted int
+	isEditing   bool
+	Renderer    *glamour.TermRenderer
+	Keymap      keymap.ViewerKeyMap
+	Finder      fzf.FuzzyFinder
 }
 
 func NewViewer(w int, h int) *Viewer {
@@ -62,13 +68,15 @@ func (m Viewer) Init() tea.Cmd {
 func (m *Viewer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case messages.EditorClose:
-		m.Viewport.SetContent(m.ReadFile(false))
+		m.Content = m.ReadFile()
+		m.Viewport.SetContent(m.RenderMarkdown(m.Content, m.Width))
 		return m, nil
 	case messages.ChangeFileMessage:
 		m.Path = msg.Path
-		content := m.ReadFile(false)
-		m.Viewport.SetContent(content)
+		m.Content = m.ReadFile()
+		m.Viewport.SetContent(m.RenderMarkdown(m.Content, m.Width))
 		m.Viewport.YOffset = 0
+		m.Highlighted = -1
 		return m, nil
 	case tea.WindowSizeMsg:
 		m.Width = msg.Width
@@ -78,6 +86,34 @@ func (m *Viewer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.Viewport.Height = msg.Width * 3 / 4
 
 		return m, nil
+	case messages.FzfSelection:
+		m.ShowFinder = false
+
+		if !msg.Exited {
+			x := -1
+			for k, v := range m.Content {
+				if v == msg.Selection {
+					x = k
+					break
+				}
+			}
+
+			m.Highlighted = x
+		}
+		return m, nil
+	case tea.KeyMsg:
+		switch {
+		case key.Matches(msg, m.Keymap.Grep):
+			m.Finder = fzf.NewFzf(m.Content, m.Width*3/4, m.Height)
+			m.ShowFinder = true
+			return m, nil
+		}
+	}
+
+	if m.ShowFinder {
+		var cmd tea.Cmd
+		m.Finder, cmd = m.Finder.Update(msg)
+		return m, cmd
 	}
 
 	var (
@@ -93,6 +129,10 @@ func (m *Viewer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Viewer) View() string {
+	if m.ShowFinder {
+		return m.Finder.View()
+	}
+
 	if m.IsFocused {
 		m.Viewport.Style = m.Viewport.Style.BorderForeground(colors.ColorPalette().FocusedBorder)
 	} else {
@@ -106,7 +146,7 @@ func (m *Viewer) Header() string {
 	return ""
 }
 
-func (m *Viewer) ReadFile(raw bool) string { // Change to editor type when config done
+func (m *Viewer) ReadFile() []string { // Change to editor type when config done
 	path := strings.TrimSuffix(m.Path, "/")
 
 	content, err := os.ReadFile(path)
@@ -115,17 +155,17 @@ func (m *Viewer) ReadFile(raw bool) string { // Change to editor type when confi
 		content = ([]byte)(fmt.Sprintf("An error occured while reading the file:%s\n%s", m.Path, err.Error()))
 	}
 
-	if raw {
-		return string(content)
-	}
-
-	rendered := m.RenderMarkdown(string(content), m.Width)
-
-	return rendered
+	return strings.Split(string(content), "\n")
 }
 
-func (m *Viewer) RenderMarkdown(md string, width int) string {
-	out, _ := m.Renderer.Render(md)
+func (m *Viewer) RenderMarkdown(md []string, width int) string {
+	out, _ := m.Renderer.Render(strings.Join(md, "\n"))
+
+	if m.Highlighted != -1 {
+		s := strings.Split(out, "\n")
+		s[m.Highlighted] = lipgloss.NewStyle().Background(colors.ColorPalette().MenuSelectedBg).Foreground(colors.ColorPalette().MenuSelectedText).Render(md[m.Highlighted])
+		out = strings.Join(s, "\n")
+	}
 
 	return out
 }

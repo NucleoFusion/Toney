@@ -10,31 +10,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var dumpCmd = &cobra.Command{
-	Use:   "dump",
-	Short: "Dump the default config to config file",
-	Run: func(cmd *cobra.Command, args []string) {
-		def := config.DefaultConfig()
+func DumpCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "dump",
+		Short: "Dump the default config to config file",
+		Run: func(cmd *cobra.Command, args []string) {
+			def := config.DefaultConfig()
 
-		home, _ := os.UserHomeDir()
-		f, err := os.Create(filepath.Join(home, ".config", "toney", "config.toml"))
-		if err != nil {
-			fmt.Println("Error Creating File: ", err.Error())
-			return
-		}
-		defer f.Close()
+			home, _ := os.UserHomeDir()
+			f, err := os.Create(filepath.Join(home, ".config", "toney", "config.toml"))
+			if err != nil {
+				fmt.Println("Error Creating File: ", err.Error())
+				return
+			}
+			defer f.Close()
 
-		encoder := toml.NewEncoder(f)
-		err = encoder.Encode(def)
-		if err != nil {
-			fmt.Println("Failed to write to file: ", err.Error())
-			return
-		}
+			encoder := toml.NewEncoder(f)
+			err = encoder.Encode(def)
+			if err != nil {
+				fmt.Println("Failed to write to file: ", err.Error())
+				return
+			}
 
-		fmt.Println("Successfully Dumped file to ~/.config/toney/config.toml")
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(dumpCmd)
+			fmt.Println("Successfully Dumped file to ~/.config/toney/config.toml")
+		},
+	}
 }

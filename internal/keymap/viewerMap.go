@@ -8,6 +8,7 @@ import (
 type ViewerKeyMap struct {
 	ScrollUp   key.Binding
 	ScrollDown key.Binding
+	Grep       key.Binding // TODO: Config and Docs
 }
 
 func NewViewerKeyMap() ViewerKeyMap {
@@ -20,6 +21,10 @@ func NewViewerKeyMap() ViewerKeyMap {
 		ScrollDown: key.NewBinding(
 			key.WithKeys(cfg.ScrollDown),
 			key.WithHelp("↓", "scroll down"),
+		),
+		Grep: key.NewBinding(
+			key.WithKeys("/"),
+			key.WithHelp("/", "grep"),
 		),
 	}
 }
