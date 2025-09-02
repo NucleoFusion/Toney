@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/spf13/viper"
 )
@@ -11,10 +12,7 @@ import (
 var AppConfig Config
 
 func SetConfig() error {
-	cfg, err := os.UserConfigDir()
-	if err != nil {
-		return fmt.Errorf("failed to get user config directory: %w", err)
-	}
+	cfg := getCfgDir()
 
 	configDir := filepath.Join(cfg, "toney")
 	configFile := filepath.Join(configDir, "config.toml")
@@ -45,4 +43,18 @@ func SetConfig() error {
 	}
 
 	return nil
+}
+
+func getCfgDir() string {
+	switch runtime.GOOS {
+	case "linux", "darwin":
+		home, _ := os.UserHomeDir()
+		return filepath.Join(home, ".config", "toney")
+	case "windows":
+		home, _ := os.UserHomeDir()
+		return filepath.Join(home, ".toney")
+	default:
+		cfg, _ := os.UserConfigDir()
+		return cfg
+	}
 }
