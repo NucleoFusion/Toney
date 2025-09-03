@@ -63,6 +63,14 @@ func (m *HomeModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		}
 
+		if m.Viewer.ShowFinder {
+			updated, cmd := m.Viewer.Update(msg)
+			if v, ok := updated.(*viewer.Viewer); ok { // Type matching, cause I cant assign it straightaway
+				m.Viewer = v
+			}
+			return m, cmd
+		}
+
 		updated, cmd := m.FileExplorer.Update(msg)
 		if fe, ok := updated.(*fileexplorer.FileExplorer); ok { // Type matching, cause I cant assign it straightaway
 			m.FileExplorer = fe
