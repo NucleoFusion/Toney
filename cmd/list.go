@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/styles"
@@ -17,6 +16,8 @@ import (
 
 type ListOptions struct {
 	Search string
+	All    bool
+	Path   string
 }
 
 func ListCmd() *cobra.Command {
@@ -33,13 +34,23 @@ func ListCmd() *cobra.Command {
 			rootpath := filepath.Join(home, config.AppConfig.General.NotesDir)
 			entries := map[string]os.DirEntry{}
 
+			if opts.Path != "" {
+				rootpath = filepath.Join(rootpath, opts.Path)
+			}
+
 			filepath.WalkDir(rootpath, func(path string, d fs.DirEntry, err error) error {
 				if err != nil {
-					log.Fatalf("failed to read notes directory (%s) : %v", path, err)
+					if opts.Path == "" {
+						log.Fatalf("failed to read notes directory (%s) : %v", path, err)
+					} else {
+						log.Fatalf("failed to read directory given with -p/--path flag (%s) : %v", path, err)
+					}
 				}
 
 				if d.IsDir() {
-					if strings.HasPrefix(d.Name(), ".") && d.Name() != config.AppConfig.General.NotesDir {
+					if d.Name() == config.AppConfig.General.NotesDir {
+						return nil
+					} else if strings.HasPrefix(d.Name(), ".") && !opts.All {
 						return fs.SkipDir
 					}
 				}
@@ -75,6 +86,8 @@ func ListCmd() *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.Search, "search", "s", "", "fuzzy find a filename that matches the given input")
+	cmd.Flags().BoolVarP(&opts.All, "all", "a", false, "include hidden files in list")
+	cmd.Flags().StringVarP(&opts.Path, "path", "p", "", "list files in given path, path is relative to the `notes_dir`")
 
 	return cmd
 }
@@ -86,7 +99,7 @@ func FormatEntries(entries map[string]os.DirEntry, root string) string {
 	for k, v := range entries {
 		info, _ := v.Info()
 		p, _ := filepath.Rel(root, k)
-		t.Row(p, info.ModTime().Format(time.DateTime), fmt.Sprintf("%dKb", info.Size()))
+		t.Row(p, info.ModTime().Format("02 Jan"), fmt.Sprintf("%dKb", info.Size()))
 	}
 
 	return t.Render()
