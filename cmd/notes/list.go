@@ -1,4 +1,4 @@
-package cmd
+package notes
 
 import (
 	"fmt"
@@ -25,9 +25,9 @@ func ListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List all notes in the notes directory",
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := config.SetConfig(); err != nil {
-				log.Fatalf("failed to load config: %v\n%s", err, "Try running the `toney init` command and try again.")
+				return fmt.Errorf("failed to load config: %v\n\n%s", err, "Try running the `toney init` command and try again.")
 			}
 
 			home, _ := os.UserHomeDir()
@@ -82,6 +82,7 @@ func ListCmd() *cobra.Command {
 			content := FormatEntries(filteredEntries, rootpath)
 
 			fmt.Println(content)
+			return nil
 		},
 	}
 
