@@ -18,7 +18,7 @@ type Daily struct {
 	Width     int
 	Height    int
 	List      list.Model
-	Tasks     Tasks
+	Tasks     []Task
 	Popup     *taskpopup.TaskPopup
 	ShowPopup bool
 	Keymap    keymap.DailyTaskMap
@@ -28,7 +28,7 @@ type Daily struct {
 func NewDaily(w int, h int) *Daily {
 	tasks := GetItems()
 
-	lst := list.New(tasks.ItemsAsList(), TaskDelegate{}, w/2, 2*h/3)
+	lst := list.New(TaskToItems(tasks), TaskDelegate{}, w/2, 2*h/3)
 	km := list.DefaultKeyMap()
 	km.Quit.Unbind()
 	lst.KeyMap = km
@@ -147,9 +147,7 @@ func (m *Daily) View() string {
 func (m *Daily) Refresh() {
 	m.Tasks = GetItems()
 
-	curr := m.Tasks.ItemsAsList()
-
-	lst := list.New(curr, TaskDelegate{}, m.Width/2, 2*m.Height/3)
+	lst := list.New(TaskToItems(m.Tasks), TaskDelegate{}, m.Width/2, 2*m.Height/3)
 	km := list.DefaultKeyMap()
 	km.Quit.Unbind()
 	lst.KeyMap = km

@@ -15,10 +15,13 @@ func (m Daily) CreateTask(msg messages.TaskPopupMessage, isUnique bool) {
 	}
 
 	if isUnique {
-		m.Tasks.Unique = append(m.Tasks.Unique, task) // Seperate Task Input for recurring / unique tasks
+		task.TaskType = enums.UniqueTask
 	} else {
-		m.Tasks.Recurring = append(m.Tasks.Recurring, task) // Seperate Task Input for recurring / unique tasks
+		task.TaskType = enums.RecurringTask
 	}
+
+	m.Tasks = append(m.Tasks, task)
+
 	WriteItems(m.Tasks)
 }
 
@@ -34,12 +37,7 @@ func (m Daily) DeleteTask(msg messages.TaskPopupMessage) {
 		return
 	}
 
-	switch task.TaskType {
-	case enums.RecurringTask:
-		m.Tasks.Recurring = slices.Delete(m.Tasks.Recurring, task.Index, task.Index+1)
-	case enums.UniqueTask:
-		m.Tasks.Unique = slices.Delete(m.Tasks.Unique, task.Index, task.Index+1)
-	}
+	m.Tasks = slices.Delete(m.Tasks, task.ID, task.ID+1)
 
 	WriteItems(m.Tasks)
 }
@@ -54,12 +52,7 @@ func (m Daily) StatusChangeTask(msg messages.TaskPopupMessage) {
 
 	task.Status = msg.Status
 
-	switch task.TaskType {
-	case enums.RecurringTask:
-		m.Tasks.Recurring[task.Index] = task
-	case enums.UniqueTask:
-		m.Tasks.Unique[task.Index] = task
-	}
+	m.Tasks[task.ID] = task
 
 	WriteItems(m.Tasks)
 }
@@ -80,12 +73,7 @@ func (m Daily) EditTask(msg messages.TaskPopupMessage) {
 
 	task.Status = oldTask.Status
 
-	switch oldTask.TaskType {
-	case enums.RecurringTask:
-		m.Tasks.Recurring[oldTask.Index] = task
-	case enums.UniqueTask:
-		m.Tasks.Unique[oldTask.Index] = task
-	}
+	m.Tasks[oldTask.ID] = task
 
 	WriteItems(m.Tasks)
 }

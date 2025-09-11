@@ -1,7 +1,6 @@
 package daily
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,62 +9,33 @@ import (
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/jszwec/csvutil"
 )
 
-type Tasks struct {
-	Recurring []Task       `json:"recurring"`
-	Unique    []Task       `json:"unique"`
-	Github    []GithubTask `json:"github"`
-}
-
-type GithubTask struct {
-	TaskTitle string           `json:"title"`
-	TaskDesc  string           `json:"desc"`
-	Status    enums.TaskStatus `json:"status"`
-	Ref       string           `json:"ref"`
-	Repo      string           `json:"repo"`
-	Owner     string           `json:"owner"`
-	// We will not store these data in the file
-	Link     string   `json:"-"`
-	Labels   []string `json:"-"`
-	Assignee []string `json:"-"`
-}
-
-func (m GithubTask) Title() string       { return m.TaskTitle }
-func (m GithubTask) Description() string { return m.TaskDesc }
-func (m GithubTask) FilterValue() string { return m.TaskTitle }
-
 type Task struct {
-	TaskTitle string           `json:"title"`
-	TaskDesc  string           `json:"desc"`
-	Status    enums.TaskStatus `json:"status"`
+	TaskTitle string           `csv:"title"`
+	TaskDesc  string           `csv:"desc"`
+	Status    enums.TaskStatus `csv:"status"`
 	// We will not store these data in the file
-	Index    int            `json:"-"` // Point to index in the respective type array
-	TaskType enums.TaskType `json:"-"`
+	ID       int            `csv:"-"` // Point to index in the respective type array
+	TaskType enums.TaskType `csv:"-"`
 }
 
 func (m Task) Title() string       { return m.TaskTitle }
 func (m Task) Description() string { return m.TaskDesc }
 func (m Task) FilterValue() string { return m.TaskTitle }
 
-func (m Tasks) ItemsAsList() []list.Item {
-	lst1 := TaskToItems(m.Recurring)
-	lst2 := TaskToItems(m.Unique)
-
-	return append(lst1, lst2...)
-}
-
 func TaskToItems(tasks []Task) []list.Item {
 	list := make([]list.Item, 0)
 	for i, v := range tasks {
-		v.Index = i
+		v.ID = i
 		v.TaskType = enums.RecurringTask
 		list = append(list, v)
 	}
 	return list
 }
 
-func GetItems() Tasks {
+func GetItems() []Task {
 	path := GetPath()
 
 	_, err := os.Stat(path)
@@ -80,12 +50,14 @@ func GetItems() Tasks {
 			fmt.Println(err2.Error())
 		}
 
-		tasks := Tasks{}
-		json.Unmarshal(content, &tasks)
+		tasks := make([]Task, 0)
+		csvutil.Unmarshal(content, &tasks)
 
-		tasks.Unique = make([]Task, 0)
+		for k := range tasks {
+			tasks[k].ID = k
+		}
 
-		data, err2 := json.Marshal(tasks)
+		data, err2 := csvutil.Marshal(tasks)
 		if err2 != nil {
 			fmt.Println(err2.Error())
 		}
@@ -97,9 +69,8 @@ func GetItems() Tasks {
 
 	content, _ := os.ReadFile(path)
 
-	tasks := Tasks{}
-
-	err = json.Unmarshal(content, &tasks)
+	tasks := make([]Task, 0)
+	err = csvutil.Unmarshal(content, &tasks)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -107,10 +78,10 @@ func GetItems() Tasks {
 	return tasks
 }
 
-func WriteItems(tasks Tasks) {
+func WriteItems(tasks []Task) {
 	path := GetPath()
 
-	data, _ := json.Marshal(tasks)
+	data, _ := csvutil.Marshal(tasks)
 
 	os.WriteFile(path, data, 0o644)
 }
