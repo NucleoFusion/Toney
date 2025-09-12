@@ -28,7 +28,7 @@ func (m Task) FilterValue() string { return m.TaskTitle }
 func TaskToItems(tasks []Task) []list.Item {
 	list := make([]list.Item, 0)
 	for i, v := range tasks {
-		v.ID = i
+		v.ID = i + 1
 		v.TaskType = enums.RecurringTask
 		list = append(list, v)
 	}
@@ -54,7 +54,7 @@ func GetItems() []Task {
 		csvutil.Unmarshal(content, &tasks)
 
 		for k := range tasks {
-			tasks[k].ID = k
+			tasks[k].ID = k + 1
 		}
 
 		data, err2 := csvutil.Marshal(tasks)
