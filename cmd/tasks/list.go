@@ -3,6 +3,9 @@ package tasks
 import (
 	"fmt"
 	"io"
+	"os"
+	"strconv"
+	"strings"
 
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/enums"
@@ -15,13 +18,12 @@ import (
 )
 
 type ListOptions struct {
-	Search string
-	All    bool
-	Path   string
+	Raw     bool
+	Verbose bool
 }
 
 func ListCmd() *cobra.Command {
-	// opts := &ListOptions{}
+	opts := &ListOptions{}
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List all current tasks",
@@ -30,7 +32,7 @@ func ListCmd() *cobra.Command {
 				return fmt.Errorf("failed to load config: %v\n\n%s", err, "Try running the `toney init` command and try again.")
 			}
 
-			dl := CmdDelegate{}
+			dl := CmdDelegate{Verbose: opts.Verbose}
 			ht := dl.Height() + dl.Spacing()
 			tasks := daily.TaskToItems(daily.GetItems())
 
@@ -41,17 +43,34 @@ func ListCmd() *cobra.Command {
 			lst.SetShowStatusBar(false)
 			lst.SetShowPagination(false)
 
+			if opts.Raw {
+				path := daily.GetPath()
+				content, _ := os.ReadFile(path)
+				fmt.Println(string(content))
+				return nil
+			}
 			fmt.Printf("\n\n%s\n\n", lst.View())
 			return nil
 		},
 	}
 
+	cmd.Flags().BoolVarP(&opts.Raw, "raw", "r", false, "get raw output of the daily tasks file")
+	cmd.Flags().BoolVarP(&opts.Verbose, "verbose", "v", false, "verbose rendering of tasks, shows description as well")
+
 	return cmd
 }
 
-type CmdDelegate struct{}
+type CmdDelegate struct {
+	Verbose bool
+}
 
-func (d CmdDelegate) Height() int                               { return 1 }
+func (d CmdDelegate) Height() int {
+	if d.Verbose {
+		return 2
+	}
+
+	return 1
+}
 func (d CmdDelegate) Spacing() int                              { return 1 }
 func (d CmdDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd { return nil }
 
@@ -68,18 +87,51 @@ func (d CmdDelegate) Render(w io.Writer, m list.Model, index int, item list.Item
 	text := ""
 	cfg := config.AppConfig.Styles.Icons.TaskIcons
 
+	icon := ""
 	switch t.Status {
 	case enums.Complete:
-		text += styles.CompletedStyle().Title.Render(fmt.Sprintf("%d. %s | %s", t.ID, cfg.CompletedIcon, Shorten(t.Title(), 35)))
+		icon = cfg.CompletedIcon
 	case enums.Pending:
-		text += styles.PendingStyle().Title.Render(fmt.Sprintf("%d. %s | %s", t.ID, cfg.PendingIcon, Shorten(t.Title(), 35)))
+		icon = cfg.PendingIcon
 	case enums.Started:
-		text += styles.StartedStyle().Title.Render(fmt.Sprintf("%d. %s | %s", t.ID, cfg.StartedIcon, Shorten(t.Title(), 35)))
+		icon = cfg.StartedIcon
 	case enums.Abandoned:
-		text += styles.AbandonedStyle().Title.Render(fmt.Sprintf("%d. %s | %s", t.ID, cfg.AbandonedIcon, Shorten(t.Title(), 35)))
+		icon = cfg.AbandonedIcon
 	}
 
-	text = lipgloss.NewStyle().MarginLeft(3).Render(text)
+	taskText := fmt.Sprintf("%s | %s", icon, Shorten(t.Title(), 35))
+
+	switch t.Status {
+	case enums.Complete:
+		taskText = styles.CompletedStyle().Title.Render(taskText)
+	case enums.Pending:
+		taskText = styles.PendingStyle().Title.Render(taskText)
+	case enums.Started:
+		taskText = styles.StartedStyle().Title.Render(taskText)
+	case enums.Abandoned:
+		taskText = styles.AbandonedStyle().Title.Render(taskText)
+	}
+
+	if d.Verbose {
+		descText := fmt.Sprintf("\n%s      %s", strings.Repeat(" ", len(strconv.Itoa(t.ID))), t.Description()) // All the spacing to align correctly with title
+
+		switch t.Status {
+		case enums.Complete:
+			descText = styles.CompletedStyle().Desc.Render(descText)
+		case enums.Pending:
+			descText = styles.PendingStyle().Desc.Render(descText)
+		case enums.Started:
+			descText = styles.StartedStyle().Desc.Render(descText)
+		case enums.Abandoned:
+			descText = styles.AbandonedStyle().Desc.Render(descText)
+		}
+
+		taskText += descText
+	}
+
+	text += taskText
+
+	text = lipgloss.NewStyle().MarginLeft(3).Render(fmt.Sprintf("%d. %s", t.ID, text))
 
 	io.WriteString(w, text)
 }
