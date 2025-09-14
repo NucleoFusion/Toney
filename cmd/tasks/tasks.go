@@ -10,6 +10,7 @@ func TasksCmd() *cobra.Command {
 
 	cmd.AddCommand(
 		ListCmd(),
+		CreatCmd(),
 	)
 
 	return cmd
