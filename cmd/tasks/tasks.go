@@ -11,6 +11,7 @@ func TasksCmd() *cobra.Command {
 	cmd.AddCommand(
 		ListCmd(),
 		CreatCmd(),
+		DeleteCmd(),
 	)
 
 	return cmd
