@@ -56,7 +56,7 @@ func DeleteCmd() *cobra.Command {
 			}
 
 			fmt.Printf("Deleted Task: `%s`\n", tasks[opts.ID].Title())
-			tasks = slices.Delete(tasks, opts.ID, opts.ID+1)
+			tasks = slices.Delete(tasks, opts.ID-1, opts.ID)
 
 			daily.WriteItems(tasks)
 

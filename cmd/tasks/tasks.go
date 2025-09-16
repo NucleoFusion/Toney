@@ -12,6 +12,7 @@ func TasksCmd() *cobra.Command {
 		ListCmd(),
 		CreatCmd(),
 		DeleteCmd(),
+		EditCmd(),
 	)
 
 	return cmd
