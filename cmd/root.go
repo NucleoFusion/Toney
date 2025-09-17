@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/SourcewareLab/Toney/cmd/notes"
+	synccmd "github.com/SourcewareLab/Toney/cmd/sync"
 	"github.com/SourcewareLab/Toney/cmd/tasks"
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/models"
@@ -61,6 +62,7 @@ func RootCmd() *cobra.Command {
 		DumpCmd(),
 		notes.NotesCmd(),
 		tasks.TasksCmd(),
+		synccmd.SyncCmd(),
 	)
 
 	return cmd
