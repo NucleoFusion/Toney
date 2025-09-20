@@ -12,6 +12,7 @@ func SyncCmd() *cobra.Command {
 		InitCmd(),
 		SaveCmd(),
 		RemoteCmd(),
+		PushCmd(),
 	)
 
 	return cmd
