@@ -55,6 +55,7 @@ func GetItems() []Task {
 
 		for k := range tasks {
 			tasks[k].ID = k + 1
+			tasks[k].Status = enums.Pending
 		}
 
 		data, err2 := csvutil.Marshal(tasks)
