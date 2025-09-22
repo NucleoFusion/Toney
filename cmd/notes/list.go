@@ -1,4 +1,4 @@
-package cmd
+package notes
 
 import (
 	"fmt"
@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/styles"
@@ -17,6 +16,8 @@ import (
 
 type ListOptions struct {
 	Search string
+	All    bool
+	Path   string
 }
 
 func ListCmd() *cobra.Command {
@@ -24,22 +25,32 @@ func ListCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List all notes in the notes directory",
-		Run: func(cmd *cobra.Command, args []string) {
+		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := config.SetConfig(); err != nil {
-				log.Fatalf("failed to load config: %v\n%s", err, "Try running the `toney init` command and try again.")
+				return fmt.Errorf("failed to load config: %v\n\n%s", err, "Try running the `toney init` command and try again.")
 			}
 
 			home, _ := os.UserHomeDir()
 			rootpath := filepath.Join(home, config.AppConfig.General.NotesDir)
 			entries := map[string]os.DirEntry{}
 
+			if opts.Path != "" {
+				rootpath = filepath.Join(rootpath, opts.Path)
+			}
+
 			filepath.WalkDir(rootpath, func(path string, d fs.DirEntry, err error) error {
 				if err != nil {
-					log.Fatalf("failed to read notes directory (%s) : %v", path, err)
+					if opts.Path == "" {
+						log.Fatalf("failed to read notes directory (%s) : %v", path, err)
+					} else {
+						log.Fatalf("failed to read directory given with -p/--path flag (%s) : %v", path, err)
+					}
 				}
 
 				if d.IsDir() {
-					if strings.HasPrefix(d.Name(), ".") && d.Name() != config.AppConfig.General.NotesDir {
+					if d.Name() == config.AppConfig.General.NotesDir {
+						return nil
+					} else if strings.HasPrefix(d.Name(), ".") && !opts.All {
 						return fs.SkipDir
 					}
 				}
@@ -71,10 +82,13 @@ func ListCmd() *cobra.Command {
 			content := FormatEntries(filteredEntries, rootpath)
 
 			fmt.Println(content)
+			return nil
 		},
 	}
 
 	cmd.Flags().StringVarP(&opts.Search, "search", "s", "", "fuzzy find a filename that matches the given input")
+	cmd.Flags().BoolVarP(&opts.All, "all", "a", false, "include hidden files in list")
+	cmd.Flags().StringVarP(&opts.Path, "path", "p", "", "list files in given path, path is relative to the `notes_dir`")
 
 	return cmd
 }
@@ -86,7 +100,7 @@ func FormatEntries(entries map[string]os.DirEntry, root string) string {
 	for k, v := range entries {
 		info, _ := v.Info()
 		p, _ := filepath.Rel(root, k)
-		t.Row(p, info.ModTime().Format(time.DateTime), fmt.Sprintf("%dKb", info.Size()))
+		t.Row(p, info.ModTime().Format("02 Jan"), fmt.Sprintf("%dKb", info.Size()))
 	}
 
 	return t.Render()

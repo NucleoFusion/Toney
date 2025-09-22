@@ -2,7 +2,12 @@ package enums
 
 type TaskType int
 
+var TaskTypeMap map[TaskType]string = map[TaskType]string{
+	RecurringTask: "Recurring",
+	UniqueTask:    "Unique",
+}
+
 const (
-	RecurringTask = iota
-	UniqueTask
+	UniqueTask = iota
+	RecurringTask
 )

@@ -81,7 +81,7 @@ func (m *FileExplorer) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.CurrentNode = m.VisibleNodes[m.CurrentIndex]
 
 			// fmt.Println(m.CurrentIndex*5, m.Vp.YOffset+m.Vp.Height-5)
-			if m.CurrentIndex > m.Vp.YOffset+m.Vp.Height-5 {
+			if m.CurrentIndex > m.Vp.YOffset+m.Vp.Height-6 {
 				m.Vp.YOffset += 1
 			}
 

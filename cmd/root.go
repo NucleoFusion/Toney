@@ -9,6 +9,9 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/SourcewareLab/Toney/cmd/notes"
+	synccmd "github.com/SourcewareLab/Toney/cmd/sync"
+	"github.com/SourcewareLab/Toney/cmd/tasks"
 	"github.com/SourcewareLab/Toney/internal/config"
 	"github.com/SourcewareLab/Toney/internal/models"
 	tea "github.com/charmbracelet/bubbletea"
@@ -55,17 +58,16 @@ func RootCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		ListCmd(),
-		DumpCmd(),
 		InitCmd(),
+		DumpCmd(),
+		notes.NotesCmd(),
+		tasks.TasksCmd(),
+		synccmd.SyncCmd(),
 	)
 
 	return cmd
 }
 
 func Execute() {
-	if err := fang.Execute(context.Background(), RootCmd()); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	fang.Execute(context.Background(), RootCmd())
 }
