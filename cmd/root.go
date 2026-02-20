@@ -54,6 +54,25 @@ func RootCmd() *cobra.Command {
 			if _, err := p.Run(); err != nil {
 				fmt.Printf("Toney error: %v\n", err)
 			}
+
+			if len(config.AppConfig.General.StopScript) > 0 {
+				script := strings.Join(config.AppConfig.General.StopScript, " ")
+				var command *exec.Cmd
+
+				switch runtime.GOOS {
+				case "windows":
+					command = exec.Command("cmd", "/C", script)
+				default:
+					command = exec.Command("sh", "-c", script)
+				}
+
+				command.Stdout = os.Stdout
+				command.Stderr = os.Stderr
+
+				if err := command.Run(); err != nil {
+					log.Printf("Stop script execution error: %v\n", err)
+				}
+			}
 		},
 	}
 
