@@ -1,7 +1,7 @@
 package fzf
 
 import (
-	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
 	"github.com/charmbracelet/bubbles/viewport"
 	"github.com/charmbracelet/lipgloss"
 )

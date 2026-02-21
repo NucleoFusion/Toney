@@ -1,8 +1,8 @@
 package menu
 
 import (
-	"github.com/SourcewareLab/Toney/internal/enums"
-	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/v2/internal/enums"
+	"github.com/SourcewareLab/Toney/v2/internal/styles"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )

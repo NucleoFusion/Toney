@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
 	"github.com/spf13/cobra"
 )
 

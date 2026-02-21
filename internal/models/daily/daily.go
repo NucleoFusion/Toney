@@ -1,12 +1,12 @@
 package daily
 
 import (
-	"github.com/SourcewareLab/Toney/internal/colors"
-	"github.com/SourcewareLab/Toney/internal/enums"
-	"github.com/SourcewareLab/Toney/internal/keymap"
-	"github.com/SourcewareLab/Toney/internal/messages"
-	taskpopup "github.com/SourcewareLab/Toney/internal/models/taskPopup"
-	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/enums"
+	"github.com/SourcewareLab/Toney/v2/internal/keymap"
+	"github.com/SourcewareLab/Toney/v2/internal/messages"
+	taskpopup "github.com/SourcewareLab/Toney/v2/internal/models/taskPopup"
+	"github.com/SourcewareLab/Toney/v2/internal/styles"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"

@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/SourcewareLab/Toney/internal/config"
-	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/styles"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 	"github.com/spf13/cobra"
 )

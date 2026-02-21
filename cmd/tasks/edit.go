@@ -3,10 +3,10 @@ package tasks
 import (
 	"fmt"
 
-	"github.com/SourcewareLab/Toney/internal/config"
-	"github.com/SourcewareLab/Toney/internal/enums"
-	"github.com/SourcewareLab/Toney/internal/models/daily"
-	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/enums"
+	"github.com/SourcewareLab/Toney/v2/internal/models/daily"
+	"github.com/SourcewareLab/Toney/v2/internal/styles"
 	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
 )

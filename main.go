@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/SourcewareLab/Toney/cmd"
+	"github.com/SourcewareLab/Toney/v2/cmd"
 )
 
 func main() {

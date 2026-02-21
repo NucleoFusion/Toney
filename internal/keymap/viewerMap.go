@@ -1,7 +1,7 @@
 package keymap
 
 import (
-	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
 	"github.com/charmbracelet/bubbles/key"
 )
 

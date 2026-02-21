@@ -3,12 +3,12 @@ package filepopup
 import (
 	"fmt"
 
-	"github.com/SourcewareLab/Toney/internal/enums"
-	filetree "github.com/SourcewareLab/Toney/internal/fileTree"
-	"github.com/SourcewareLab/Toney/internal/messages"
-	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/v2/internal/enums"
+	filetree "github.com/SourcewareLab/Toney/v2/internal/fileTree"
+	"github.com/SourcewareLab/Toney/v2/internal/messages"
+	"github.com/SourcewareLab/Toney/v2/internal/styles"
 
-	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )

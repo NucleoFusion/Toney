@@ -1,9 +1,9 @@
 package taskpopup
 
 import (
-	"github.com/SourcewareLab/Toney/internal/colors"
-	"github.com/SourcewareLab/Toney/internal/keymap"
-	"github.com/SourcewareLab/Toney/internal/styles"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/keymap"
+	"github.com/SourcewareLab/Toney/v2/internal/styles"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/textinput"
