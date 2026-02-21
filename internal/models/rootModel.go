@@ -167,17 +167,6 @@ func (m *RootModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return m, nil
 		case "ctrl+c":
-			// Stop script
-			script := strings.Join(config.AppConfig.General.StopScript, " ")
-			command := exec.Command("bash", "-c", script)
-
-			command.Stdout = os.Stdout
-			command.Stderr = os.Stderr
-
-			err := command.Run()
-			if err != nil {
-				return m, utils.ReturnError("Root", "Error Closing Editor", err)
-			}
 			return m, tea.Quit
 		}
 
