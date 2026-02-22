@@ -3,8 +3,8 @@ package daily
 import (
 	"slices"
 
-	"github.com/SourcewareLab/Toney/internal/enums"
-	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/SourcewareLab/Toney/v2/internal/enums"
+	"github.com/SourcewareLab/Toney/v2/internal/messages"
 )
 
 func (m Daily) CreateTask(msg messages.TaskPopupMessage, isUnique bool) {

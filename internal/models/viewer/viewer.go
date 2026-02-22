@@ -5,12 +5,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/SourcewareLab/Toney/internal/config"
-	"github.com/SourcewareLab/Toney/internal/keymap"
-	"github.com/SourcewareLab/Toney/internal/messages"
-	"github.com/SourcewareLab/Toney/internal/models/fzf"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/keymap"
+	"github.com/SourcewareLab/Toney/v2/internal/messages"
+	"github.com/SourcewareLab/Toney/v2/internal/models/fzf"
 
-	"github.com/SourcewareLab/Toney/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"

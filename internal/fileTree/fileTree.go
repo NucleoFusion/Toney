@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/SourcewareLab/Toney/internal/colors"
-	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
 	"github.com/charmbracelet/lipgloss"
 )
 

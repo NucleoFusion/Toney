@@ -3,8 +3,8 @@ package fzf
 import (
 	"fmt"
 
-	"github.com/SourcewareLab/Toney/internal/colors"
-	"github.com/SourcewareLab/Toney/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
 	"github.com/charmbracelet/bubbles/textinput"
 	"github.com/charmbracelet/lipgloss"
 )

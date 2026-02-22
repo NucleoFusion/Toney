@@ -3,9 +3,9 @@ package fzf
 import (
 	"sort"
 
-	"github.com/SourcewareLab/Toney/internal/colors"
-	"github.com/SourcewareLab/Toney/internal/keymap"
-	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/keymap"
+	"github.com/SourcewareLab/Toney/v2/internal/messages"
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/textinput"

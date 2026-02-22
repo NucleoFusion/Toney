@@ -3,10 +3,10 @@ package menu
 import (
 	"strings"
 
-	"github.com/SourcewareLab/Toney/internal/colors"
-	"github.com/SourcewareLab/Toney/internal/config"
-	"github.com/SourcewareLab/Toney/internal/enums"
-	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/SourcewareLab/Toney/v2/internal/colors"
+	"github.com/SourcewareLab/Toney/v2/internal/config"
+	"github.com/SourcewareLab/Toney/v2/internal/enums"
+	"github.com/SourcewareLab/Toney/v2/internal/messages"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )

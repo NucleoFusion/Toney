@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/SourcewareLab/Toney/internal/messages"
+	"github.com/SourcewareLab/Toney/v2/internal/messages"
 	tea "github.com/charmbracelet/bubbletea"
 )
 

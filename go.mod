@@ -1,4 +1,4 @@
-module github.com/SourcewareLab/Toney
+module github.com/SourcewareLab/Toney/v2
 
 go 1.24.2
 

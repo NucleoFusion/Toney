@@ -60,5 +60,5 @@ go build
 ### With Go Install 
 
 ```
-go install github.com/SourcewareLab/Toney@latest
+go install github.com/SourcewareLab/Toney/v2@latest
 ```
